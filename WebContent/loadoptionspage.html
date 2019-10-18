@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Load Options Page</title>
+
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+table.table1 {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+table.table1 td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.table2 tr:nth-child(odd) {
+	background-color: #C0C0C0;
+}
+
+table.table1 {
+	margin-right: 0px;
+	margin-left: auto;
+	width = 40%;
+}
+
+table.table2 {
+	margin-top: -120px;
+	margin-bottom: 100px;
+	margin-left: 100px;
+}
+
+table.logOutTable {
+  float:right;
+}
+
+</style>
+
+<script>
+	function loadCasinoPage() {
+		console.log("Casino page loading");
+		window.href.location = "casino.html";
+
+	}
+</script>
+</head>
+<body>
+
+
+	<table class="logOutTable">
+		<tr>
+			<td>
+				<button type="button" class="btn btn-primary" onclick = "loadHomePage()">Home</button>
+				<button type="button" class="btn btn-primary" onclick = "killSession()">Log Out</button>
+			</td>
+		</tr>
+	</table>
+	
+	<h1 id= "welcome"> Yo :</h1>
+	
+	<br>
+
+	<table class="table1">
+		<tr>
+			<th>Clean Money</th>
+			<th>Dirty Money</th>
+		</tr>
+		<tr>
+			<td><p id="cm"></p></td>
+			<td><p id="dm"></p></td>
+		</tr>
+	</table>
+
+
+	<table class="table2">
+		<caption>Pick your favorite way to transact ;) here!</caption>
+<!-- 
+		<tr>
+			<td><button onClick="loadSmurfsPage()">Smurfs</button></td>
+		</tr>
+		<tr>
+			<td><button onClick="loadInsuranceAgents()">Insurance</button></td>
+		</tr>
+		<tr>
+			<td><button>Stock Brokers</button></td>
+		</tr>
+		<tr>
+			<td><button>NGOs / Charities</button></td>
+		</tr>
+		<tr>
+			<td><button>Cash Smuggling</button></td>
+		</tr>
+		<tr>
+			<td><button>Bitcoins</button></td>
+		</tr>
+		<tr>
+			<td><button onClick = "loadStuffPage()">Buy Stuff</button></td>
+		</tr>
+		<tr>
+			<td><button>Restaurant</button></td>
+		</tr>
+		<tr>
+			<td><button>Make a movie</button></td>
+		</tr>
+		<tr>
+			<td><button>Real Estate</button></td>
+		</tr>
+		<tr>
+			<td><button>Registered Agents</button></td>
+		</tr> 
+		<tr>
+			<td><button>Hawala</button></td>
+		</tr>
+		<tr>
+			<td><button>Precious Gems</button></td>
+		</tr>
+		<tr>
+			<td><button onClick = "loadArtPage()">Art</button></td>
+		</tr>
+		<tr>
+			<td><button>Stored Value Cards</button></td>
+		</tr>
+		<tr>
+			<td><button>Online Gaming</button></td>
+		</tr>
+		<tr>
+			<td><button>Night Club</button></td>
+		</tr>
+		<tr>
+			<td><button>Open shop</button></td>
+		</tr>
+		-->		
+		
+		<tr>
+			<td><button onClick="loadCasinoPage()">Casinos</button></td>
+		</tr>
+		<tr>
+			<td><button onclick="openShellCompany()">Open Shell Company</button></td>
+		</tr>
+		<tr>
+			<td><button onclick="openLegitCompany()">Open Legit Company</button></td>
+		</tr>
+		
+
+	</table>
+
+
+
+	<script>
+	
+		function openLegitCompany() {
+			window.location.href = "OpenLegitCompany.html";
+		}
+
+		//--------------------------
+		
+		function openShellCompany(){
+			window.location.href = "OpenShellCompany.html";
+		}
+	
+	
+		//--------------------------------------------------------------------------------------------------------------------
+		function killSession(){
+				
+				if (confirm("Are you sure you want to Log out?!")) {
+				$.ajax({
+					url : "LogOut",
+					type : 'POST',
+					contentType : 'text',
+					data : 'yo',
+					dataType : 'text',
+					success : function(response) {
+		
+						var type = typeof (response);
+						console.log(type);
+						console.log("response: " + response);
+		
+					},
+		
+					error : function(xhr, ajaxOptions, thrownError) {
+						//On error do this
+						if (xhr.status == 200) {
+							console.log("error");
+							console.log(xhr);
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+							//alert(thrownError);
+						}
+					}
+				});// end of  AJAX!!!!!!
+				
+				window.location.href = "loginform.html";
+				}
+			}
+	
+		//------------------------------------------------------------------------------------------------------------
+		function loadHomePage(){
+				window.location.href = "HomeScreen.html";
+			}
+
+		//----------------Connects to servlet which connects aml.network table to aml.friendrequesttable----------------------------------
+		
+		//-----------------------------------------------------------------------------------------------------------------------------
+
+		function loadCasinoPage() {
+			console.log("Casino page loading");
+			window.location.href = "casino.html";
+
+		}
+
+		function loadSmurfsPage() {
+			console.log("Smurfs page loading");
+			window.location.href = "smurfs.html";
+		}
+
+		function loadInsuranceAgents() {
+			console.log("Insurance page loading");
+			window.location.href = "insurance.html";
+		}
+
+		function loadArtPage() {
+			console.log("Insurance page loading");
+			window.location.href = "art.html";
+		}
+
+		function loadStuffPage() {
+			window.location.href = "buyStuffs.html";
+		}
+		
+		//This must run as soon as this page is loaded----------------------TransNotificationServlet-----------------------------------------------
+
+		//This must run as soon as this page is loaded--------------Notification Servlet-------------------------------------------------------
+
+
+		//-------------------------------------------------------------------------------------------
+		$.ajax({
+			url : "accountView",
+			type : 'POST',
+			contentType : 'application/json',
+			//data: mystr, -----> this is the type of data you send
+			dataType : 'text',
+			success : function(response) {
+				//On ajax success do this
+				var type = typeof (response);
+				console.log(type);
+				console.log("response:");
+				console.log(response);
+				response = JSON.parse(response);
+				var cleanmoney = response.cleanmoney;
+				var dirtymoney = response.dirtymoney;
+				document.getElementById("cm").innerHTML = cleanmoney;
+				document.getElementById("dm").innerHTML = dirtymoney;
+
+				//console.log(doc);
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});
+		//-------------------------------------------------------------------------------------
+
+		$.ajax({
+			url : "TestServlet2",
+			type : 'POST',
+			//contentType : 'application/json',
+			//data: mystr, -----> this is the type of data you send
+			dataType : 'text',
+			success : function(response) {
+				//On ajax success do this
+				var type = typeof (response);
+				console.log(type);
+				console.log("response:");
+				console.log(response);
+
+				document.getElementById("welcome").innerHTML = "Welcome, "
+						+ response;
+
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});
+
+	</script>
+
+
+</body>
+</html>

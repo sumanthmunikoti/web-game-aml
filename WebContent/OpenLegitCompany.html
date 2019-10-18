@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="bootstrap\css\bootstrap.min.css">
+
+<meta charset="ISO-8859-1">
+
+<title>AML</title>
+
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+  <META NAME="Keywords" CONTENT="form, username, checker">
+  <META NAME="Description" CONTENT="An AJAX Username Verification Script">
+<script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+	
+</head>
+	
+<!-------------- Experiment ends here --------------------->	
+	
+<body>
+<h1>Register yourself to create an account </h1>
+
+<b>Check availability of Company Names here</b><br>
+<b>Type a name and press "return/tab" key</b> 
+
+  <table>  
+    <tr>
+      <td><div>Company Name:&nbsp;</div></td>
+      <td width="100"><input id="username" size="20" type="text" name="username"></td>
+      <td width="400" align="left"><div id="status"></div></td>
+    </tr> 
+    </table>
+
+	<br> Password:
+	<input id="password" type="password" name="password" value="">
+	<br>
+	
+	<br> Confirm Password:
+	<input id="confirmPassword" type="password" name="confirmPassword" value="">
+	<br>
+
+	<b>Select an address</b>
+	<br>
+	<select id="address">
+		<option value="Cayman Islands">Fugland House, George Town, Cayman Islands</option>
+		<option value="Pakistan">Pakistan</option>
+		<option value="Someshwar Nagar">Someshwar Nagar</option>
+		<option value="San Fransisco">San Fransisco</option>
+		<option value="Yelahanka Newtown">Yelahanka Newtown</option>
+		<option value="New Delhi">New Delhi</option>
+		<option value="Syria">Syria</option>
+	</select>
+	<br>
+
+	<b>Line of Business</b>
+	<br>
+	<select id="lob">
+		<option value="Travel Agency">Travel Agency</option>
+		<option value="Bank and Financial services">Bank and
+			Financial services</option>
+		<option value="Second hand car dealers">Second hand car
+			dealers</option>
+		<option value="Ganja Dealer">Ganja Dealer</option>
+		<option value="Other">Other</option>
+	</select>
+	<br>
+
+	<b>Select a bank</b>
+	<br>
+	<select id="bank">
+		<option value="SBI">SBI</option>
+		<option value="Bank of America">Bank of America</option>
+		<option value="Vijaya Bank">Vijaya Bank</option>
+		<option value="Raiffeisen Bank">Raiffeisen Bank</option>
+		<option value="Standard Chartered Bank">Standard Chartered Bank</option>
+	</select>
+	<br>
+
+	<b>This would be your commodity</b>
+	<br>
+	<select id="comm">
+		<option value="20-Oranges">20-Oranges</option>
+		<option value="2-Diamonds">2-Diamonds</option>
+		<option value="700-Chips">700-Chips</option>
+		<option value="4-ArtWorks">4-ArtWorks</option>
+	</select>
+	<br>
+	
+	<hr>
+
+	<button onclick="loadData()">Submit</button>
+
+	<p id="bnk"></p>
+	<p id="finalString"></p>
+	<p id="addressp"></p>
+	<p id="pcomm"></p>
+
+	<script>
+	
+	pic1 = new Image(16, 16); 
+	pic1.src = "loader.gif";
+
+	$(document).ready(function(){
+
+	$("#username").change(function() { 
+
+	var usr = $("#username").val();
+
+	if(usr.length >= 4)
+	{
+	$("#status").html('<img src="loader.gif" align="absmiddle">&nbsp;Checking availability...');
+
+	$.ajax({  
+	    type: "POST",  
+	    url: "ServletForPhp",  
+	    data: usr,  
+	    success: function(msg){  
+	   
+	    	console.log("msg: "+msg);
+	    	console.log(msg.trim() == 'OK');
+	   
+	   $("#status").ajaxComplete(function(event, request, settings){ 
+		   console.log("I am here before msg == 'OK'");
+		if(msg.trim() == 'OK')
+		{ 
+	        $("#username").removeClass('object_error'); // if necessary
+			$("#username").addClass("object_ok");
+			$(this).html('&nbsp;<img src="tick.gif" align="absmiddle">');
+		}  
+		else  
+		{  
+			$("#username").removeClass('object_ok'); // if necessary
+			$("#username").addClass("object_error");
+			$(this).html(msg);
+		}  
+	   
+	   });
+
+	 } 
+	   
+	  }); 
+
+	}
+	else
+		{
+		$("#status").html('<font color="red">The username should have at least <strong>4</strong> characters.</font>');
+		$("#username").removeClass('object_ok'); // if necessary
+		$("#username").addClass("object_error");
+		}
+
+	});
+
+	});
+
+//-----------------------------------------------------------------------
+	function loadData() {
+
+
+			var bnk_name = document.getElementById('bank').value;
+			var addrs = document.getElementById('address').value;
+			var lob = document.getElementById('lob').value;
+			var comm = document.getElementById('comm').value;
+			var password = document.getElementById('password').value;
+			var confirmPassword = document.getElementById('confirmPassword').value;
+			
+			console.log("password: "+password);
+			console.log("confirmPassword: "+confirmPassword);
+			
+			var oranges=0;
+			var diamonds=0;
+			var chips=0;
+			var artWorks=0;
+			var orangePrice = 20.0;
+			var artPrice = 300.0;
+			var chipsPrice = 1.1;
+			var diamondPrice = 500.0;
+			
+			if(comm == "20-Oranges"){
+				oranges = 20; 
+			}
+			else if(comm == "2-Diamonds"){
+				diamonds = 2;
+			}
+			else if(comm == "700-Chips"){
+				chips = 700;
+			}
+			else{
+				artWorks = 4;
+			}
+
+			document.getElementById("bnk").innerHTML = bnk_name;
+
+			cleanmoney = 1500.0;
+			dirtymoney = 1700.0;
+			sum = cleanmoney + dirtymoney
+			console.log("The sum: "+ sum);
+			
+			if (password != confirmPassword){
+				alert("Confirmation password is not the same as the password");
+				
+			}
+
+			else{
+				
+			console.log("In the else loop");
+			
+			
+			var companyName = document.getElementById('username').value;
+			var mystr = "{'userid':'"+ companyName
+						+ "','firstname':'NA','lastname':'NA','password':'"
+						+ password	+ "','gender' :'NA','entity':'Legit','address':'"
+						+ addrs + "','lineofbusiness':'" + lob
+						+ "','bankname':'" + bnk_name + "','cleanmoney':'"
+						+ cleanmoney + "','dirtymoney':'" + dirtymoney
+						+ "','oranges':'" + oranges + "','orangePrice':'"
+						+ orangePrice + "','diamonds':'" + diamonds
+						+ "','diamondPrice':'" + diamondPrice + "','chips':'"
+						+ chips + "','chipsPrice':'" + chipsPrice
+						+ "','artWorks':'" + artWorks + "','artPrice':'"
+						+ artPrice + "'}";
+
+				document.getElementById("finalString").innerHTML = mystr;
+
+				window.location.href = "Message.html";
+
+				$.ajax({
+					url : "accountView",
+					type : 'POST',
+					contentType : 'application/json',
+					data : mystr,
+					dataType : 'text',
+
+					success : function(data) {
+						console.log("Communication succesful");
+						console.log(mystr);
+						console.log(data);
+					},
+					error : function(xhr, ajaxOptions, thrownError) {
+						//On error do this
+						if (xhr.status == 200) {
+							console.log("Failed");
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+						}
+					}
+				});
+
+				//Ajax here to store company ownership details
+				
+				var companyOwnerString = "{'companyName':'"+companyName+ "','entityType':'Legit'}"; 
+				
+				$.ajax({
+					url : "ComOwnServlet",//created
+					type : 'POST',
+					contentType : 'application/json',
+					data : companyOwnerString,
+					dataType : 'text',//to be received
+
+					success : function(data) {
+						console.log("Communication succesful");
+						console.log(mystr);
+						console.log(data);
+					},
+					error : function(xhr, ajaxOptions, thrownError) {
+						//On error do this
+						if (xhr.status == 200) {
+							console.log("Failed");
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+						}
+					}
+				});
+				
+				//-----------------------------------------------------
+				
+				$.ajax({
+					url : "TestServlet1",
+					type : 'GET',
+					dataType : 'text',
+
+					success : function(data) {
+						var type = typeof (data)
+						console.log(type);
+						console.log(data);
+					},
+
+					error : function(xhr, ajaxOptions, thrownError) {
+						if (xhr.status == 200) {
+							console.log("Failed");
+						} else {
+							//nothing to see here						
+						}
+
+					}
+				});
+
+			}//end else here
+		}
+	</script>
+	
+</body>
+</html>

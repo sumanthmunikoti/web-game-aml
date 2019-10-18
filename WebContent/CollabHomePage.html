@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HomePage</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<style>
+table.table1 {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+table.table1 td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.table1 {
+	margin-top: -50px;
+	margin-right: 0px;
+	margin-left: auto;
+	width = 40%
+}
+</style>
+
+</head>
+
+<body>
+
+	<h1 id="welcome">Yo :</h1>
+	
+	<button onClick="loadTransactionNetwork()">Display Collaborators</button>
+
+ <table class="table1" id="collaborators-list" class="buttons">
+
+		<caption>List of Collaborators</caption>
+		
+		<tr>
+			<th>UserID</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Address</th>
+			<th>Lob</th>
+			<th>Bank</th>
+			<th>Clean Money</th>
+			<th>Dirty Money</th>
+			<th>Commodity</th>
+		</tr>
+		
+		<tr>
+			<td id="uid"></td>
+			<td id="fn"></td>
+			<td id="ln"></td>
+			<td id="add"></td>
+			<td id="lob"></td>
+			<td id="bank"></td>
+			<td id="cm"></td>
+			<td id="dm"></td>
+			<td id="comm"></td>
+		</tr>
+		
+	</table>
+	
+	<table class="table2" id="collaboratorDetails">
+		<tr>
+			<th>UserID</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Address</th>
+			<th>Lob</th>
+		</tr>
+	</table>
+	
+	
+	<script>
+	
+	//---------------------function to load the clicked user's page------------------------------------
+	
+		function loadCollabPage(userid){
+				//go to your collaborator's homepage
+						
+				//code to fetch details of a particular user and load it in the collaboratorDetails table 
+		}
+	
+	//------------------------function to load the people in the transaction network--------------------
+	
+		function loadTransactionNetwork() {
+			console.log("clicked button");
+			
+					$.ajax({
+						url : "CollaboratorServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						dataType : 'text',
+						success : function(response) {
+							console.log("success");
+							var type = typeof (response);
+							console.log(response);
+							console.log(type);
+							response = JSON.parse(response);
+							
+							for (i=0; i<response.length; i++){
+								var jsoni = response[i];
+								console.log(jsoni);
+								
+								var userid = jsoni.userid;
+								var first_name = jsoni.first_name;
+								var last_name = jsoni.last_name;
+								var address = jsoni.address;
+								var lob = jsoni.lob;
+								var bank = jsoni.bank;
+								var clean_money = jsoni.clean_money;
+								var dirty_money = jsoni.dirty_money;
+								var commodity = jsoni.commodity;
+								
+								var x = document.getElementById('collaborators-list').insertRow(i+1);
+								
+								var c1 = x.insertCell(0);
+								var c2 = x.insertCell(1);
+								var c3 = x.insertCell(2);
+								var c4 = x.insertCell(3);
+								var c5 = x.insertCell(4);
+								var c6 = x.insertCell(5);
+								var c7 = x.insertCell(6);
+								var c8 = x.insertCell(7);
+								var c9 = x.insertCell(8);
+
+								c1.innerHTML = '<button style="width:100%" onclick="loadCollabPage(\'' + userid + '\')">'+ userid + '</button>';
+								c2.innerHTML = first_name;
+								c3.innerHTML = last_name;
+								c4.innerHTML = address;
+								c5.innerHTML = lob;
+								c6.innerHTML = bank;
+								c7.innerHTML = clean_money;
+								c8.innerHTML = dirty_money;
+								c9.innerHTML = commodity;
+								
+							}// end for
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("error junk if");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								console.log("error junk else");
+								console.log(xhr);
+							}
+						}
+					});
+					
+		}
+					
+					//---------------------------------Session Code--------------------------------------------------------------
+					
+					$.ajax({
+						url : "TestServlet2",
+						type : 'POST',
+						//contentType : 'application/json',
+						//data: mystr, -----> this is the type of data you send
+						dataType : 'text',
+						success : function(response) {
+							//On ajax success do this
+							var type = typeof (response);
+							console.log(type);
+							console.log("response:");
+							console.log(response);
+							document.getElementById("welcome").innerHTML = "Welcome, "+ response;
+
+						},
+						error : function(xhr, ajaxOptions, thrownError) {
+							//On error do this
+							if (xhr.status == 200) {
+								console.log("error");
+		     						console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								//alert(xhr.status);
+								//alert(thrownError);
+							}
+						}
+					});
+					
+</script>
+</body>
+</html>

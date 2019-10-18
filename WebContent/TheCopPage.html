@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>The Cop Page</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+<style>
+table.usersWithTransactions {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+table.transactionTable td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.comOwnDetails {
+  float:right;
+  border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+</style>
+
+</head>
+<body>
+
+		<table class="logOutTable">
+		<tr>
+			<td>
+
+				<button type="button" class="btn btn-primary" onClick="loadHomePage()">Home</button>
+				<button type="button" class="btn btn-primary" onClick="killSession()">Log Out</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<h1 id="welcome">Yo:</h1>
+
+	<table class = "comOwnDetails" id="comOwnDetails">
+	<tr> 
+	<th>Companies owned by this User</th>
+	</tr>
+	<tr>
+			<td id="cod">------------</td>
+	</tr>
+	</table>
+	
+	<table class = "usersWithTransactions" id="usersWithTransactions">
+	<tr> 
+	<th>User</th>
+	<th>Number of transactions</th>
+	</tr>
+	<tr>
+			<td id="uid"></td>
+			<td id="numTrans"></td>
+	</tr>
+	</table>
+
+
+	<table class="transactionTable" id="transactionDetails" class="buttons">
+
+		<caption>List of transactions</caption>
+		
+		<tr>
+			<th>Transaction ID</th>
+			<th>Date</th>
+			<th>Amount</th>
+			<th>Sender</th>
+			<th>Sender Address</th>
+			<th>Sender LoB</th>
+			<th>Commodity</th>
+			<th>Receiver</th>
+			<th>Receiver Address</th>
+			<th>Receiver Lob</th>
+			<th>Cop Action</th>
+		</tr>
+
+		<tr>
+			<td id="tid"></td>
+			<td id="date"></td>
+			<td id="amt"></td>
+			<td id="sen"></td>
+			<td id="senAdd"></td>
+			<td id="senLob"></td>
+			<td id="comm"></td>
+			<td id="rec"></td>
+			<td id="recAdd"></td>
+			<td id="recLob"></td>
+			<td id="report"></td>
+		</tr>
+		
+	</table>
+	
+	
+	<script>
+	
+	function loadHomePage(){
+		window.location.href = "HomeScreen.html";
+	}
+	
+	//-------------Log out code-----------------------------------------------------------------------------
+	
+	function killSession(){
+		
+		if (confirm("Are you sure you want to Log out?!")) {
+			
+			
+		$.ajax({
+			url : "LogOut",
+			type : 'POST',
+			contentType : 'text',
+			data : 'yo',
+			dataType : 'text',
+			success : function(response) {
+
+				var type = typeof (response);
+				console.log(type);
+				console.log("response: " + response);
+
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});// end of  AJAX!!!!!!
+		
+		window.location.href = "loginform.html";
+		}
+	}
+
+	
+	//---------------------------------Session Code--------------------------------------------------------------
+			
+				$.ajax({
+					url : "TestServlet2",
+					type : 'POST',
+					dataType : 'text',
+					success : function(response) {
+						document.getElementById("welcome").innerHTML = "Please click on the buttons to view and report the transactions!";
+			
+					},
+					error : function(xhr, ajaxOptions, thrownError) {
+						if (xhr.status == 200) {
+							console.log("error");
+							console.log(xhr);
+						} else {
+							//alert(xhr.status);
+							//alert(thrownError);
+						}
+					}
+				});
+	
+	//-------------------------------------------------------------------------------------------------------
+	function reportPayment(transactionid){
+		
+		if (confirm("Are you sure you want to report this transaction with transaction id: "+transactionid)) {
+			
+			$
+			.ajax({
+				url : "ReportPaymentServlet", 
+				type : 'POST',					
+				contentType : 'application/json',
+				data : transactionid,
+				dataType : 'text',
+				success : function(response) {
+					var type = typeof (response);
+					console.log(response);
+					console.log(type);
+					response = JSON.parse(response);
+					var type = response.type;
+					var amount = response.amount;
+					console.log("amount: "+amount);
+					console.log("type: "+type);
+					
+					if(type == "clean"){
+						alert("You were wrong! You have lost "+amount+" unit(s) of money");
+					}
+					
+					if(type == "dirty"){
+						alert("You were right! You have won "+amount+" unit(s) of money");
+					}
+					
+					window.location.reload();
+
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+		}
+	}
+	
+	//-------------------------end of function reportPayment(transactionid)-----------------------------------
+	//This ajax is run as soon as the page is loaded
+	
+	$
+					.ajax({
+						url : "TransactedUsersServlet", 
+						type : 'POST',					//no data is to be sent
+						contentType : 'application/json',
+						dataType : 'text',
+						success : function(response) {
+							var type = typeof (response);
+							console.log(response);
+							console.log(type);
+							response = JSON.parse(response);
+
+							for (i = 0; i < response.length; i++) {
+
+								console.log("This i did save your ass: " + i);
+
+								var jsoni = response[i];
+								console.log(jsoni);
+
+								var userid = jsoni.userid;
+								var numOfTransactions = jsoni.numOfTransactions;
+								
+								var x = document.getElementById(
+										'usersWithTransactions').insertRow(i + 1);
+
+								var c1 = x.insertCell(0);
+								var c2 = x.insertCell(1);
+
+								c1.innerHTML = '<button style="width:100%" onclick="loadTransactionDetails(\'' + userid + '\')">'+ userid + '</button>';
+								c2.innerHTML = numOfTransactions;
+
+							}// end for
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("error junk if");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								console.log("error junk else");
+								console.log(xhr);
+							}
+						}
+					});
+
+	//----------------------------------------------------------------------------------------------------
+	
+		function loadTransactionDetails(userid) {
+
+			console.log("clicked button brings me here. The userid is: "
+					+ userid);
+			
+			var transactionDetailsTable = document.getElementById("transactionDetails");
+			transactionDetailsTable.innerHTML = "";
+
+			var x = document.getElementById('transactionDetails')
+			.insertRow(0);
+
+			var c1 = x.insertCell(0);
+			var c2 = x.insertCell(1);
+			var c3 = x.insertCell(2);
+			var c4 = x.insertCell(3);
+			var c5 = x.insertCell(4);
+			var c6 = x.insertCell(5);
+			var c7 = x.insertCell(6);
+			var c8 = x.insertCell(7);
+			var c9 = x.insertCell(8);
+			var c10 = x.insertCell(9);
+			var c11 = x.insertCell(10);
+		
+			c1.innerHTML = 'TransactionId';
+			c2.innerHTML = 'Date';
+			c3.innerHTML = 'Amount';
+			c4.innerHTML = 'Sender';
+			c5.innerHTML = 'Sender Address';
+			c6.innerHTML = 'Sender LoB';
+			c7.innerHTML = 'Commodity';
+			c8.innerHTML = 'Receiver';
+			c9.innerHTML = 'Receiver Address';
+			c10.innerHTML = 'Receiver LoB';
+			c11.innerHTML = 'Cop Action';
+			
+			$.ajax({
+
+				url : "TransactionDetailsServlet", //This is created
+				type : 'POST',
+				contentType : 'application/json',
+				data : userid,
+				dataType : 'text',
+
+				success : function(response) {
+					var type = typeof (response);
+					console.log(response);
+					console.log(type);
+					response = JSON.parse(response);
+
+					for (i = 0; i < response.length; i++) {
+
+						console.log("This i did save your ass: " + i);
+
+						var jsoni = response[i];
+						console.log(jsoni);
+
+						var transactionid = jsoni.transactionid;
+						var date = jsoni.date;
+						var commPrice = jsoni.commPrice;
+						var sender = jsoni.sender;
+						var senderAddress = jsoni.senderAddress;
+						var senderLob = jsoni.senderLob;
+						var commodity = jsoni.commodity;
+						var receiver = jsoni.receiver;
+						var receiverAddress = jsoni.receiverAddress;
+						var receiverLob = jsoni.receiverLob;
+						
+						var reported = jsoni.reported;
+						var sessionUser = jsoni.sessionUser; 
+						//This variable is passed here to eliminate the sessionUser from appearing in 
+						//either in the sender or the receiver columns
+						
+						var x = document.getElementById('transactionDetails')
+								.insertRow(i + 1);
+						
+						//The following part would be executed if reported = 'no'
+						
+								if(sender != sessionUser && receiver != sessionUser && reported=='no'){
+											
+											var c1 = x.insertCell(0);
+											var c2 = x.insertCell(1);
+											var c3 = x.insertCell(2);
+											var c4 = x.insertCell(3);
+											var c5 = x.insertCell(4);
+											var c6 = x.insertCell(5);
+											var c7 = x.insertCell(6);
+											var c8 = x.insertCell(7);
+											var c9 = x.insertCell(8);
+											var c10 = x.insertCell(9);
+											var c11 = x.insertCell(10);
+
+											c1.innerHTML = transactionid;
+											c2.innerHTML = date;
+											c3.innerHTML = commPrice;
+											c4.innerHTML = sender;
+											c5.innerHTML = senderAddress;
+											c6.innerHTML = senderLob;
+											c7.innerHTML = commodity;
+											c8.innerHTML = receiver;
+											c9.innerHTML = receiverAddress;
+											c10.innerHTML = receiverLob;
+											c11.innerHTML = '<button style="width:100%" button id ="'+transactionid+'" onclick="reportPayment(\''
+												+ transactionid + '\')">'
+												+ "Report" + '</button>';
+						}//end if(sender != sessionUser && receiver != sessionUser)
+					}// end for
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+			
+			//var comOwnDetailsTable = document.getElementById("comOwnDetails");
+			//comOwnDetailsTable.innerHTML = "";
+
+			//var y = document.getElementById('comOwnDetails').insertRow(0);
+
+			//var d1 = y.insertCell(0);
+		
+			//d1.innerHTML = 'Companies owned by this User';
+
+			$.ajax({
+				url : "IndividualComOwnServlet", //This is to be created
+				type : 'POST',
+				contentType : 'application/json',
+				data : userid,
+				dataType : 'text',
+
+				success : function(response) {
+					var type = typeof (response);
+					console.log(response);
+					console.log(type);
+					response = JSON.parse(response);
+
+					for (i = 0; i < response.length; i++) {
+
+						var jsoni = response[i];
+						console.log(jsoni);
+
+						var companyName = jsoni.companyName;
+
+						var x = document.getElementById('comOwnDetails')
+								.insertRow(i + 1);
+
+						var c1 = x.insertCell(0);
+
+						c1.innerHTML = companyName;
+
+					}// end for
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+		}
+	
+	
+
+	</script>
+</body>
+</html>

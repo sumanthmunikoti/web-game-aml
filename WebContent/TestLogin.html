@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">   
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+
+<body>
+	<table id="example" class="display" width="100%"></table>
+</body>
+
+<script>
+
+var theArray = [];
+	
+	$.ajax({
+
+		url : "findJunkets",
+		type : 'POST',
+		contentType : 'application/json',
+		//data: mystr, -----> this is the type of data you send
+		dataType : 'text',
+		success : function(response) {
+			console.log("success");
+			var type = typeof (response);
+			response = JSON.parse(response);
+			
+			var j = 0;
+			
+			for (i = 0; i < response.length; i++) {
+
+				var jsoni = response[i];
+				//console.log(jsoni);
+				var userid = jsoni.userid;
+				var inNetwork = jsoni.inNetwork;
+				var serialNumber = i+1;
+
+				var type = typeof (jsoni);
+				
+				var serialString = serialNumber.toString();
+				
+				inNetwork = '<button style="width:100%" onclick="sendRequest(\'' + userid + '\')">'+ inNetwork + '</button>';
+				
+				var preArray = [];
+				
+				preArray.push(serialString);
+				preArray.push(userid);
+				preArray.push(inNetwork);
+				
+				theArray.push(preArray);
+				
+			}//end for
+			//console.log("theArray: "+theArray);
+			//console.log("typeof theArray: "+typeof theArray);
+			loadTable(theArray);
+		},
+
+		error : function(xhr, ajaxOptions, thrownError) {
+			//On error do this
+			if (xhr.status == 200) {
+				console.log("error junk if");
+				console.log(xhr);
+				//alert(ajaxOptions);
+			} else {
+				console.log("error junk else");
+				console.log(xhr);
+			}
+		}
+	});
+
+
+function loadTable(dataSet){
+	$(document).ready(function() {
+		$('#example').DataTable({
+			data : theArray,
+			columns : [ 
+			            {title : "Name"}, 
+			            {title : "Position"}, 
+		                {title : "Office"},
+			]
+		});
+	});
+}
+</script>
+</html>
+
+<!-- var dataSet = [
+               [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "<button>$320,800</button>" ],
+               [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
+               [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
+               [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
+               [ "Airi Satou", "Accountant", "Tokyo", "5407", "2008/11/28", "$162,700" ],
+               [ "Brielle Williamson", "Integration Specialist", "New York", "4804", "2012/12/02", "$372,000" ],
+               [ "Herrod Chandler", "Sales Assistant", "San Francisco", "9608", "2012/08/06", "$137,500" ],
+               [ "Rhona Davidson", "Integration Specialist", "Tokyo", "6200", "2010/10/14", "$327,900" ],
+               [ "Colleen Hurst", "Javascript Developer", "San Francisco", "2360", "2009/09/15", "$205,500" ],
+               [ "Sonya Frost", "Software Engineer", "Edinburgh", "1667", "2008/12/13", "$103,600" ],
+               [ "Jena Gaines", "Office Manager", "London", "3814", "2008/12/19", "$90,560" ],
+               [ "Quinn Flynn", "Support Lead", "Edinburgh", "9497", "2013/03/03", "$342,000" ],
+               [ "Charde Marshall", "Regional Director", "San Francisco", "6741", "2008/10/16", "$470,600" ],
+               [ "Haley Kennedy", "Senior Marketing Designer", "London", "3597", "2012/12/18", "$313,500" ],
+               [ "Tatyana Fitzpatrick", "Regional Director", "London", "1965", "2010/03/17", "$385,750" ],
+               [ "Michael Silva", "Marketing Designer", "London", "1581", "2012/11/27", "$198,500" ],
+               [ "Paul Byrd", "Chief Financial Officer (CFO)", "New York", "3059", "2010/06/09", "$725,000" ],
+               [ "Gloria Little", "Systems Administrator", "New York", "1721", "2009/04/10", "$237,500" ],
+               [ "Bradley Greer", "Software Engineer", "London", "2558", "2012/10/13", "$132,000" ],
+               [ "Dai Rios", "Personnel Lead", "Edinburgh", "2290", "2012/09/26", "$217,500" ],
+               [ "Jenette Caldwell", "Development Lead", "New York", "1937", "2011/09/03", "$345,000" ],
+               [ "Yuri Berry", "Chief Marketing Officer (CMO)", "New York", "6154", "2009/06/25", "$675,000" ],
+               [ "Caesar Vance", "Pre-Sales Support", "New York", "8330", "2011/12/12", "$106,450" ],
+               [ "Doris Wilder", "Sales Assistant", "Sidney", "3023", "2010/09/20", "$85,600" ],
+               [ "Angelica Ramos", "Chief Executive Officer (CEO)", "London", "5797", "2009/10/09", "$1,200,000" ],
+               [ "Gavin Joyce", "Developer", "Edinburgh", "8822", "2010/12/22", "$92,575" ],
+               [ "Jennifer Chang", "Regional Director", "Singapore", "9239", "2010/11/14", "$357,650" ],
+               [ "Brenden Wagner", "Software Engineer", "San Francisco", "1314", "2011/06/07", "$206,850" ],
+               [ "Fiona Green", "Chief Operating Officer (COO)", "San Francisco", "2947", "2010/03/11", "$850,000" ],
+               [ "Shou Itou", "Regional Marketing", "Tokyo", "8899", "2011/08/14", "$163,000" ],
+               [ "Michelle House", "Integration Specialist", "Sidney", "2769", "2011/06/02", "$95,400" ],
+               [ "Suki Burks", "Developer", "London", "6832", "2009/10/22", "$114,500" ],
+               [ "Prescott Bartlett", "Technical Author", "London", "3606", "2011/05/07", "$145,000" ],
+               [ "Gavin Cortez", "Team Leader", "San Francisco", "2860", "2008/10/26", "$235,500" ],
+               [ "Martena Mccray", "Post-Sales support", "Edinburgh", "8240", "2011/03/09", "$324,050" ],
+               [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
+           ]; 
+           
+           
+           { title: "Extn." },
+            { title: "Start date" },
+            { title: "Salary" }
+            -->
+
+
+
+<!--
+
+	[
+	["1","Abhishek","Make this person your accomplice"],
+	["2","Aditya","Make this person your accomplice"],
+	["3","Albert311569","Make this person your accomplice"],
+	["4","Ananth","Make this person your accomplice"],
+	["5","Coolos","Make this person your accomplice"],
+	["6","Creative Works","Make this person your accomplice"],
+	["7","Data411385","Make this person your accomplice"],
+	["8","Deepthi","Make this person your accomplice"],
+	["9","Details614650","Make this person your accomplice" ],
+	[ "10", "Ganapathi561558", "Make this person your accomplice" ],
+	[ "11", "Hoosesh", "Make this person your accomplice" ],
+	[ "12", "Idont202870", "Make this person your accomplice" ],
+	[ "13", "J821704", "Make this person your accomplice" ],
+	[ "14", "Javed 103385", "Make this person your accomplice" ],
+	[ "15", "Kariya886537", "Make this person your accomplice" ],
+	[ "16", "Luigi Bros", "Make this person your accomplice" ],
+	[ "17", "Madhuri525595", "Make this person your accomplice" ],
+	[ "18", "Mahesh 512703", "Make this person your accomplice" ],
+	[ "19", "Mario Knows", "Make this person your accomplice" ],
+	[ "20", "MoB Barley", "Make this person your accomplice" ],
+	[ "21", "Murali2", "Make this person your accomplice" ],
+	[ "22", "Murali584908", "Make this person your accomplice" ],
+	[ "23", "Pali", "Make this person your accomplice" ],
+	[ "24", "Palslsl311685", "Make this person your accomplice" ],
+	[ "25", "Please979490", "Make this person your accomplice" ],
+	[ "26", "Pwdw973152", "Make this person your accomplice" ],
+	[ "27", "Random243384", "Make this person your accomplice" ],
+	[ "28", "Rashmi And Co", "Make this person your accomplice" ],
+	[ "29", "RashmiRao Ganja Dealers", "Make this person your accomplice" ],
+	[ "30", "Reuban402518", "Make this person your accomplice" ],
+	[ "31", "Sadiq252497", "Make this person your accomplice" ],
+	[ "32", "Sandhya597177", "Make this person your accomplice" ],
+	[ "33", "Scalpine Corp", "Make this person your accomplice" ],
+	[ "34", "Shailendra388034", "Make this person your accomplice" ],
+	[ "35", "Shwetha", "Make this person your accomplice" ],
+	[ "36", "Sivaraman 433482", "Make this person your accomplice" ],
+	[ "37", "Sourav 99629", "Make this person your accomplice" ],
+	[ "38", "Suppandi520031", "Make this person your accomplice" ],
+	[ "39", "Syed658296", "Make this person your accomplice" ],
+	[ "40", "Syed897404", "Make this person your accomplice" ],
+	[ "41", "undefined", "Make this person your accomplice" ],
+	[ "42", "Veena", "Make this person your accomplice" ],
+	[ "43", "Vikash203699", "Make this person your accomplice" ],
+	[ "44", "wel265045", "Make this person your accomplice" ] 
+];
+
+-->

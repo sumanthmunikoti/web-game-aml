@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+
+h1{
+	text-align: center;
+}
+
+
+form {
+	border: 3px solid #f1f1f1;
+}
+
+button {
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+
+.cancelbtn {
+	width: auto;
+	padding: 10px 18px;
+	background-color: #f44336;
+}
+
+.imgcontainer {
+	text-align: center;
+	margin: 24px 0 12px 0;
+}
+
+img.avatar {
+	width: 40%;
+	border-radius: 50%;
+}
+
+.container {
+	padding: 16px;
+}
+
+span.pass {
+	float: right;
+	padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+	span.pass {
+		display: block;
+		float: none;
+	}
+	.cancelbtn {
+		width: 100%;
+	}
+}
+</style>
+<body>
+
+<p id="waitmessage" style="visibility:hidden;">Please wait till I find a partner for you to play the game with!</p>
+	<h1>Login Form</h1>
+	
+	<div class="container">
+		<label><b>Username</b></label> 
+		<input type="text" onkeypress="return searchKeyPress(event)" placeholder="Enter Username" value="" id="uname" name="uname" required> 
+		
+		<input type="button" class="btn btn-info btn-lg" id="btnSearch" Value="Login" onclick="loadOptionsPage()"/>
+	</div>		
+	
+	<div class="container" style="background-color: #f1f1f1">
+	<span class="reg" onclick="loadWelcomePage()"><a href="#">Register Account for yourself</a></span><br>
+	</div>
+	
+	
+<script>
+
+	function searchKeyPress(e) {
+		// look for window.event in case event isn't passed in
+		e = e || window.event;
+		if (e.keyCode == 13) {
+			document.getElementById('btnSearch').click();
+			return false;
+		}
+		return true;
+	}
+
+	function loadWelcomePage() {
+
+		window.location.href = "SimpleRegistration.html";
+
+	}
+
+	function loadOptionsPage() {
+
+		var uname = document.getElementById('uname').value;
+		
+
+		$.ajax({
+			url : "WebGameServlet",
+			type : 'POST',
+			contentType : 'text',
+			data : uname,
+
+			success : function(data) {
+				window.location.href = "dock.xhtml?myid="+uname;
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					//window.location.href = "dock.xhtml?myid="+uname;
+					//alert(ajaxOptions);
+					//alert(thrownError);
+				} else {
+					//alert(xhr.status);
+			
+				}
+			}
+		});
+
+		
+		$.ajax({
+			url : "TestServlet1",
+			type : 'POST',
+			contentType : 'text',
+			data : uname,
+
+			success : function(data) {
+				console.log("Communication successful");
+				console.log(data);
+				var type = typeof (data);
+				console.log(type);
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("Failed");
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});
+
+		var unameStr = "{'uname':'"+uname+"'}";
+
+		$.ajax({
+			url : "SimpleCheckUserId",
+			type : 'POST',
+			contentType : 'application/json',
+			data : unameStr,
+			dataType : 'text',
+
+			success : function(response) {
+				if (response == 0) {
+						//This event must be logged
+						//event name: failed login
+						//userid = from servlet
+						//we need an ajax call here that would take the values to mama.
+						
+						var today = new Date();
+						var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+						var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+						var dateTime = date+' '+time;
+						console.log(dateTime);
+						
+						var eventName = "Failed Login";
+						var value = "";
+						
+						var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+						
+
+			$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("Communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+
+					alert("Please enter the correct username!");
+				
+				} else {
+					
+					var today = new Date();
+					var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTime = date+' '+time;
+					console.log(dateTime);
+					
+					var eventName = "Successful Login";
+					var value = "";
+					
+					var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+					
+					$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("UserLogServlet communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+					
+	//				window.location.href = "HomeScreen2.0.html";
+				}
+
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				if (xhr.status == 200) {
+					console.log("Failed");
+				}
+			}
+		});
+
+	}
+</script>
+
+</body>
+</html>

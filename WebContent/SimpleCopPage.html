@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>The Cop Page</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+<style>
+table.usersWithTransactions {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+table.transactionTable td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.comOwnDetails {
+  float:right;
+  border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+</style>
+
+</head>
+<body>
+
+		<table class="logOutTable">
+		<tr>
+			<td>
+
+				<button type="button" class="btn btn-primary" onClick="loadHomePage()">Home</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<h1 id="welcome">Yo:</h1>
+
+	<table class = "comOwnDetails" id="comOwnDetails">
+	<tr> 
+	<th>Companies owned by this User</th>
+	</tr>
+	<tr>
+			<td id="cod">------------</td>
+	</tr>
+	</table>
+	
+	<table class = "usersWithTransactions" id="usersWithTransactions">
+	<tr> 
+	<th>User</th>
+	<th>Number of transactions</th>
+	</tr>
+	<tr>
+			<td id="uid"></td>
+			<td id="numTrans"></td>
+	</tr>
+	</table>
+
+
+	<table class="transactionTable" id="transactionDetails" class="buttons">
+
+		<caption>List of transactions</caption>
+		
+		<tr>
+			<th>Transaction ID</th>
+			<th>Sender</th>
+			<th>Quantity</th>
+			<th>Commodity</th>
+			<th>Receiver</th>
+			<th>Cop Action</th>
+		</tr>
+		
+	</table>
+	
+	
+	<script>
+	
+	function loadHomePage(){
+		window.location.href = "HomeScreen2.html";
+	}
+	
+	//-------------Log out code-----------------------------------------------------------------------------
+	
+	function killSession(){
+		
+		if (confirm("Are you sure you want to Log out?!")) {
+			
+			
+		$.ajax({
+			url : "LogOut",
+			type : 'POST',
+			contentType : 'text',
+			data : 'yo',
+			dataType : 'text',
+			success : function(response) {
+
+				var type = typeof (response);
+				console.log(type);
+				console.log("response: " + response);
+
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});// end of  AJAX!!!!!!
+		
+		window.location.href = "loginform.html";
+		}
+	}
+
+	
+	//-------------------------------------------------------------------------------------------------------
+	function reportPayment(transactionid){
+		
+		if (confirm("Are you sure you want to report this transaction with transaction id: "+transactionid)) {
+			
+			$
+			.ajax({
+				url : "ReportSimpleTransaction", 
+				type : 'POST',					
+				contentType : 'application/json',
+				data : transactionid,
+				dataType : 'text',
+				success : function(response) {
+					var type = typeof (response);
+//					console.log(response);
+//					console.log(type);
+		
+					response = JSON.parse(response);
+					var commodity = response.commodity;
+					var amount = response.amount;
+	
+	//				console.log("amount: "+amount);
+	//				console.log("type: "+type);
+					
+					if(commodity == "clean_money"){
+						alert("You were wrong! You have lost "+amount+" unit(s) of money");
+					}
+					
+					if(commodity == "dirty_money"){
+						alert("You were right! You have won "+amount+" unit(s) of money");
+					}
+					
+					window.location.reload();
+
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+		}
+	}
+	
+	//-------------------------end of function reportPayment(transactionid)-----------------------------------
+	//This ajax is run as soon as the page is loaded
+	
+	$
+					.ajax({
+						url : "SimpleTransactedUsers", 
+						type : 'POST',					//no data is to be sent
+						contentType : 'application/json',
+						dataType : 'text',
+						success : function(response) {
+							var type = typeof (response);
+							console.log(response);
+							console.log(type);
+							response = JSON.parse(response);
+
+							for (i = 0; i < response.length; i++) {
+
+								console.log("This i did save your ass: " + i);
+
+								var jsoni = response[i];
+								console.log(jsoni);
+
+								var userid = jsoni.userid;
+								var numOfTransactions = jsoni.numOfTransactions;
+								
+								var x = document.getElementById(
+										'usersWithTransactions').insertRow(i + 1);
+
+								var c1 = x.insertCell(0);
+								var c2 = x.insertCell(1);
+
+								c1.innerHTML = '<button style="width:100%" onclick="loadTransactionDetails(\'' + userid + '\')">'+ userid + '</button>';
+								c2.innerHTML = numOfTransactions;
+
+							}// end for
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("error junk if");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								console.log("error junk else");
+								console.log(xhr);
+							}
+						}
+					});
+
+	//----------------------------------------------------------------------------------------------------
+	
+		function loadTransactionDetails(userid) {
+
+			var transactionDetailsTable = document.getElementById("transactionDetails");
+			transactionDetailsTable.innerHTML = "";
+
+			var x = document.getElementById('transactionDetails')
+			.insertRow(0);
+
+			var c1 = x.insertCell(0);
+			var c2 = x.insertCell(1);
+			var c3 = x.insertCell(2);
+			var c4 = x.insertCell(3);
+			var c5 = x.insertCell(4);
+			//var c6 = x.insertCell(5);
+		
+			c1.innerHTML = 'TransactionId';
+			c2.innerHTML = 'Sender';
+			c3.innerHTML = 'Valuable Qty';
+			//c4.innerHTML = 'Commodity';
+			c4.innerHTML = 'Receiver';
+			c5.innerHTML = 'Cop Action';
+			
+			$.ajax({
+
+				url : "ViewPrivateTransactions", //This is created
+				type : 'POST',
+				contentType : 'application/json',
+				data : userid,
+				dataType : 'text',
+
+				success : function(response) {
+					var type = typeof (response);
+					response = JSON.parse(response);
+
+					for (i = 0; i < response.length; i++) {
+
+						var jsoni = response[i];
+						console.log(jsoni);
+
+						var transactionid = jsoni.transactionid;
+						var sender = jsoni.sender;
+						var valuableQty = jsoni.valuableQty;
+						var commodity = jsoni.commodity;
+						var receiver = jsoni.receiver;
+						var reported = jsoni.reported;
+						
+						var x = document.getElementById('transactionDetails')
+								.insertRow(i + 1);
+						
+						//The following part would be executed if reported = 'no'
+						
+								if(reported=='no' && (commodity =='clean_money' || commodity == 'dirty_money'))
+	
+								{
+											var c1 = x.insertCell(0);
+											var c2 = x.insertCell(1);
+											var c3 = x.insertCell(2);
+											var c4 = x.insertCell(3);
+											var c5 = x.insertCell(4);
+											//var c6 = x.insertCell(5);
+
+											c1.innerHTML = transactionid;
+											c2.innerHTML = sender;
+											c3.innerHTML = valuableQty;
+											//c4.innerHTML = commodity;
+											c4.innerHTML = receiver;
+											c5.innerHTML = '<button style="width:100%" button id ="'+transactionid+'" onclick="reportPayment(\''
+												+ transactionid + '\')">'
+												+ "Report" + '</button>';
+						}//end if
+					}// end for
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+			
+	}
+			
+
+	</script>
+</body>
+</html>

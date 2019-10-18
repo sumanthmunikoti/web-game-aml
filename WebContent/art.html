@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Art for Laundering</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<style>
+table.table1 {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+table.table1 td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.table1 {
+	margin-top: -50px;
+	margin-right: 0px;
+	margin-left: auto;
+	width
+	=
+	40%
+}
+</style>
+
+</head>
+<body>
+	<button onClick="retrieveData()">Load Asset Values</button>
+	<br>
+
+	<b>Instructions to launder money</b>
+	<p>
+		<button onclick="loadArtDealers()">1. Find Art Dealers</button>
+	</p>
+	<p>2. Purchase a piece of art for a small amount</p>
+	<p>3. "Sell" it to your friend for a huge amount</p>
+	<p>4. Get the profit deposited into your bank account</p>
+	<p>5. Profit!!!</p>
+
+	<table class="table1">
+		<caption>Assets owned by you</caption>
+		<tr>
+			<th>Clean Money</th>
+			<th>Dirty Money</th>
+			<th>Commodity</th>
+		</tr>
+		<tr>
+			<td><p id="cm"></p></td>
+			<td><p id="dm"></p></td>
+			<td><p id="comm"></p></td>
+		</tr>
+	</table>
+
+	<table class="table2">
+		<caption>List of Art Dealers</caption>
+		<tr>
+			<th>UserID</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+		</tr>
+		<tr>
+			<td><p id="uid"></p></td>
+			<td><p id="fn"></p></td>
+			<td><p id="ln"></p></td>
+		</tr>
+	</table>
+
+	<script>
+ function loadArtDealers(){
+	 console.log("clicked button");
+ $.ajax({
+	 
+	 url: "findArtDealers",
+	   type: 'POST',
+	   contentType:'application/json',
+	   //data: mystr, -----> this is the type of data you send
+	   dataType:'text',
+	   success: function(response){
+		   console.log("success");
+	     	var type = typeof(response);
+	     	console.log(response);
+	     	console.log(type);
+	     	response = JSON.parse(response);
+			var userid = response.userid;
+			var firstname = response.first_name;
+			var lastname = response.last_name;
+			document.getElementById("uid").innerHTML = userid;
+			document.getElementById("fn").innerHTML = firstname;
+			document.getElementById("ln").innerHTML = lastname;
+			
+		
+			
+			
+			
+	      },
+	   error: function(xhr, ajaxOptions, thrownError) {
+	      //On error do this
+	        if (xhr.status == 200) {
+	        	console.log("error junk if");
+				console.log(xhr);
+	            //alert(ajaxOptions);
+	        }
+	        else {
+	            console.log("error junk else");
+	            console.log(xhr);
+	        }
+	    }
+	 });
+ }
+ 
+ 
+
+ 
+ 
+ 
+ function retrieveData() {
+		$.ajax({
+			url : "accountView",
+			type : 'POST',
+			contentType : 'application/json',
+			//data: mystr, -----> this is the type of data you send
+			dataType : 'text',
+			success : function(response) {
+				//On ajax success do this
+				var type = typeof (response);
+				console.log(type);
+				console.log("response:");
+				console.log(response);
+				response = JSON.parse(response);
+				var commodity = response.commodity;
+				var cleanmoney = response.cleanmoney;
+				var dirtymoney = response.dirtymoney;
+				document.getElementById("cm").innerHTML = cleanmoney;
+				document.getElementById("dm").innerHTML = dirtymoney;
+				document.getElementById("comm").innerHTML = commodity;
+				
+				//console.log(doc);
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});
+	}
+
+
+ </script>
+
+</body>
+</html>

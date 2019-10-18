@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HomeScreen 2.0</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">   
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="codeCollection.js"></script>
+
+
+<style>
+
+table.reportTable {
+	margin-right: auto;
+	margin-left: 0px;
+	width = 50%;
+}
+
+table.reportTable {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+}
+
+table.logOutTable {
+	float: right;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.reportTable td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<table class="logOutTable">
+		<tr>
+			<td>
+				<button type="button" class="btn btn-primary" onClick="loadHomePage()">Home</button> 				
+			</td>
+		</tr>
+	</table>
+
+<h2 id="welcome">Yo :</h2>
+<table class="reportTable" id="reportTable" class="display"></table>
+
+</body>
+
+<script>
+
+$.ajax({
+	url : "TestServlet2",
+	type : 'POST',
+	dataType : 'text',
+	success : function(response) {
+		var type = typeof (response);
+		console.log(type);
+		console.log("response:");
+		console.log(response);
+		document.getElementById("welcome").innerHTML = "Welcome, "
+				+ response;
+		sessionUser = response.trim();
+	},
+	error : function(xhr, ajaxOptions, thrownError) {
+		if (xhr.status == 200) {
+			console.log("error");
+			console.log(xhr);
+		} 
+	}
+});
+
+//----------------------------------------------------------------------------------------------	
+	var theArray = [];
+	
+	$.ajax({
+	url : "ViewTransactions",
+	type : 'POST',
+	contentType : 'application/json',
+	//data : sessionUser,
+	dataType : 'text',
+	success : function(response) {
+		var type = typeof (response);
+		console.log(type);
+		console.log("response:");
+		console.log(response);
+		response = JSON.parse(response);
+
+		for (i = 0; i < response.length; i++) {
+
+			var jsoni = response[i];
+			console.log(jsoni);
+
+			var transactionid = jsoni.transactionid;
+			var sender = jsoni.sender;
+			var valuableQty = jsoni.valuableQty;
+			var commodity = jsoni.commodity;
+			var receiver = jsoni.receiver;
+			var reported = jsoni.reported;
+			
+			var preArray = [];
+			
+			preArray.push(transactionid);
+			preArray.push(sender);
+			preArray.push(valuableQty);
+			preArray.push(commodity);
+			preArray.push(receiver);
+			preArray.push(reported);
+			
+			theArray.push(preArray);
+			
+		}// end for
+		loadTable(theArray);
+	},
+
+	error : function(xhr, ajaxOptions, thrownError) {
+		if (xhr.status == 200) {
+			console.log("error");
+			console.log(xhr);
+			//alert(ajaxOptions);
+		} else {
+			//alert(xhr.status);
+			//alert(thrownError);
+		}
+	}
+});
+
+	function loadTable(dataSet){
+		//console.log("In loadTable function");
+		$(document).ready(function() {
+			$('#reportTable').DataTable({
+				data : theArray,
+				columns : [ 
+				            {title : "Transaction ID"}, 
+				            {title : "Sender"}, 
+			                {title : "Amount"},
+			                {title : "Commodity"},
+			                {title : "Receiver"},
+			                {title : "Red Flagged?"},
+			           ]
+			});
+		});
+	}
+
+
+//-------------------------------------------------------------------------------
+
+function loadHomePage(){
+	
+	//-----------------------------userlogdetails---------------------------
+	
+	var today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	var dateTime = date+' '+time;
+	console.log(dateTime);
+	
+	var eventName = "Home Button clicked";
+	var value = "";
+	var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+	
+	$.ajax({
+		url : "UserLogServlet",
+		type : 'POST',
+		contentType : 'application/json',
+		data : userLog,
+
+		success : function(data) {
+			console.log("Communication successful");
+			console.log(data);
+			var type = typeof (data);
+			console.log(type);
+		},
+
+		error : function(xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 200) {
+				console.log("Failed");
+			} 
+		}
+	});
+
+	//-----------------------------userlogdetails---------------------------
+
+	window.location.href = "HomeScreen2.0.html";
+}
+
+</script>
+</html>

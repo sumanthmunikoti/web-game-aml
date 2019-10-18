@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="bootstrap\css\bootstrap.min.css">
+
+<meta charset="ISO-8859-1">
+
+<title>AML</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+  <META NAME="Keywords" CONTENT="form, username, checker">
+  <META NAME="Description" CONTENT="An AJAX Username Verification Script">
+<script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+	
+</head>
+	
+<body>
+<h1>Register yourself to create an account </h1>
+
+<b>Check availability of username here</b><br>
+<b>Type a name and press "return/enter" key</b> 
+
+  <table>  
+    <tr>
+      <td>Username:&nbsp;</td>
+      <td width="100"><input id="username" size="20" type="text" name="username"></td>
+      <td width="400" align="left"><div id="status"></div></td>
+    </tr> 
+    </table>
+
+
+	<b>Please enter your name</b>
+	<br> First name:
+	<input id="firstName" type="text" name="FirstName" value="">
+	<br> Last name:
+	<input id="secondName" type="text" name="LastName" value="">
+	<br>
+	
+	<br> Password:
+	<input id="password" type="password" name="password" value="">
+	<br>
+	
+	<br> Confirm Password:
+	<input id="confirmPassword" type="password" name="confirmPassword" value="">
+	<br>
+
+	<b>Gender</b>
+	<br>
+	<input id="male" type="radio" name="gender" value="male"> Male
+	<br>
+	<input id="female" type="radio" name="gender" value="female">
+	Female
+	<br>
+	<input id="other" type="radio" name="gender" value="other">
+	Other
+	<br>
+
+<!--<b>Entity Type</b>
+	<br>
+	<div>
+		<input id="entity" type="radio" name="entityType" value="Entity">
+		Entity <input id="individual" type="radio" name="entityType"
+			value="Individual">Individual <br>
+	</div>  -->
+	
+
+	<b>Input a country of residence</b>
+	<br>
+	<select id="address">
+		<option value="Cayman Islands">Cayman Islands</option>
+		<option value="Isle of Man">Isle of Man</option>
+		<option value="Jersey">Jersey</option>
+		<option value="British Virgin Islands">British Virgin Islands</option>
+		<option value="Switzerland">Switzerland</option>
+		<option value="India">India</option>
+		<option value="Russia">Russia</option>
+	</select>
+	<br>
+
+	<b>Line of Business</b>
+	<br>
+	<select id="lob">
+		<option value="Precious Metals And Gems Dealer">Precious Metals And Gems Dealer</option>
+		<option value="Art Collector And Dealer">Art Collector And Dealer</option>
+		<option value="Realtor">Realtor</option>
+		<option value="Freelance Graphic Designer">Freelance Graphic Designer</option>
+		<option value="Interior Decorator">Interior Decorator</option>
+	</select>
+	<br>
+
+	<b>Select a bank</b>
+	<br>
+	<select id="bank">
+		<option value="SBI">SBI</option>
+		<option value="Bank of America">Bank of America</option>
+		<option value="Vijaya Bank">Vijaya Bank</option>
+		<option value="Raiffeisen Bank">Raiffeisen Bank</option>
+		<option value="Standard Chartered Bank">Standard Chartered Bank</option>
+	</select>
+	<br>
+
+	<hr>
+
+	<button onclick="loadData()">Submit</button>
+
+	<p id="eType"></p>
+	<p id="fName"></p>
+	<p id="sName"></p>
+	<p id="gen"></p>
+	<p id="bnk"></p>
+	<p id="finalString"></p>
+	<p id="addressp"></p>
+
+	<script>
+	
+	pic1 = new Image(16, 16); 
+	pic1.src = "loader.gif";
+
+	$(document).ready(function(){
+
+	$("#username").change(function() { 
+
+	var usr = $("#username").val();
+
+	if(usr.length >= 4)
+	{
+	$("#status").html('<img src="loader.gif" align="absmiddle">&nbsp;Checking availability...');
+
+	$.ajax({  
+	    type: "POST",  
+	    url: "ServletForPhp",  
+	    data: usr,  
+	    success: function(msg){  
+	   
+	    	console.log("msg: "+msg);
+	    	console.log(msg.trim() == 'OK');
+	   
+	   $("#status").ajaxComplete(function(event, request, settings){ 
+		   console.log("I am here before msg == 'OK'");
+		if(msg.trim() == 'OK')
+		{ 
+	        $("#username").removeClass('object_error'); // if necessary
+			$("#username").addClass("object_ok");
+			$(this).html('&nbsp;<img src="tick.gif" align="absmiddle">');
+		}  
+		else  
+		{  
+			$("#username").removeClass('object_ok'); // if necessary
+			$("#username").addClass("object_error");
+			$(this).html(msg);
+		}  
+	   
+	   });
+
+	 } 
+	   
+	  }); 
+
+	}
+	else
+		{
+		$("#status").html('<font color="red">The username should have at least <strong>4</strong> characters.</font>');
+		$("#username").removeClass('object_ok'); // if necessary
+		$("#username").addClass("object_error");
+		}
+
+	});
+
+	});
+
+//-----------------------------------------------------------------------
+	function loadData() {
+
+			if (document.getElementById('male').checked) {
+				var gender_value = document.getElementById('male').value;
+			}
+			if (document.getElementById('female').checked) {
+				var gender_value = document.getElementById('female').value;
+			}
+			if (document.getElementById('other').checked) {
+				var gender_value = document.getElementById('other').value;
+			}
+
+			//if (document.getElementById('entity').checked) {
+				//var entity_value = document.getElementById('entity').value;
+			//}
+
+			//if (document.getElementById('individual').checked) {
+				var entity_value = 'Individual';
+			//}
+
+			var s_name = document.getElementById('secondName').value;
+			var f_name = document.getElementById('firstName').value;
+			var bnk_name = document.getElementById('bank').value;
+			var addrs = document.getElementById('address').value;
+			var lob = document.getElementById('lob').value;
+			var password = document.getElementById('password').value;
+			var confirmPassword = document.getElementById('confirmPassword').value;
+			
+			console.log("password: "+password);
+			console.log("confirmPassword: "+confirmPassword);
+			
+			var preciousMetals=1;
+			var artWorks=1;
+			var property=1;
+			
+			//there was no var previously in these 2 declarations
+			var cleanmoney = 7500.0;
+			var dirtymoney = 7500.0;
+
+			var preciousMetalsPrice = 250.0;
+			var artPrice = 500.0;
+			var propertyPrice = 1000.0;
+			
+			if(lob == "Precious Metals And Gems Dealer"){
+				preciousMetals = 20; //20*250
+				cleanmoney = 5000.0;
+				dirtymoney = 5000.0;
+			}//preciousMetals are new!
+			else if(lob == "Art Collector And Dealer"){
+				artWorks = 10;//10*500
+				cleanmoney = 5000.0;
+				dirtymoney = 5000.0;
+			}//
+			else if(lob == "Realtor"){
+				property = 5;// 5*1000
+				cleanmoney = 5000.0;
+				dirtymoney = 5000.0;
+			}//property
+
+			document.getElementById("gen").innerHTML = gender_value;
+			document.getElementById("fName").innerHTML = f_name;
+			document.getElementById("eType").innerHTML = entity_value;
+			document.getElementById("sName").innerHTML = s_name;
+			document.getElementById("bnk").innerHTML = bnk_name;
+
+			sum = cleanmoney + dirtymoney
+			console.log("The sum: "+ sum);
+			
+			if (password != confirmPassword){
+				alert("Confirmation password is not the same as the password");
+			}
+
+			else{
+				
+			console.log("In the else loop");
+			
+			var userid = document.getElementById('username').value;
+			var mystr = "{'userid':'" + userid + "','firstname':'" + f_name
+					+ "','lastname':'" + s_name + "','password':'"+password+"','gender' :'"
+					+ gender_value + "','entity':'" + entity_value
+					+ "','address':'" + addrs + "','lineofbusiness':'"
+					+ lob + "','bankname':'" + bnk_name
+					+ "','cleanmoney':'" + cleanmoney
+					+ "','dirtymoney':'" + dirtymoney + "','preciousMetals':'"
+					+ preciousMetals + "','preciousMetalsPrice':'" + preciousMetalsPrice +"','property':'" 
+					+ property + "','propertyPrice':'" + propertyPrice +"','artWorks':'" 
+					+ artWorks + "','artPrice':'" + artPrice +"'}";
+
+			document.getElementById("finalString").innerHTML = mystr;
+ 
+			window.location.href = "loginform.html";
+
+			$.ajax({
+				url : "accountView",
+				type : 'POST',
+				contentType : 'application/json',
+				data : mystr,
+				dataType : 'text',
+				
+				success : function(data) {
+					console.log("Communication succesful");	
+					console.log(mystr);
+					console.log(data);
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("Failed");
+						//alert(ajaxOptions);
+					} else {
+						//alert(xhr.status);
+					}
+				}
+			});
+			
+			$.ajax({
+				url : "TestServlet1",
+				type : 'GET',
+				dataType : 'text',
+				
+				success: function(data){
+					var type = typeof(data)
+					console.log(type);
+					console.log(data);
+				},
+			
+			error : function(xhr, ajaxOptions, thrownError) {
+				if(xhr.status == 200){
+					console.log("Failed");
+				} else {
+				//nothing to see here						
+				}	
+				
+			 }
+		});
+			
+			}//end else here
+	}
+	</script>
+	
+</body>
+</html>

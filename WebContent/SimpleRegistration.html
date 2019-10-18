@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="bootstrap\css\bootstrap.min.css">
+
+<meta charset="ISO-8859-1">
+
+<title>AML</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+  <META NAME="Keywords" CONTENT="form, username, checker">
+  <META NAME="Description" CONTENT="An AJAX Username Verification Script">
+<script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+	
+</head>
+	
+<body>
+<h1>Register yourself to create an account.<br> The username entered here could be used to login again</h1>
+
+<b>Check availability of username here</b><br>
+<b>Type a name and press "return/enter" key</b> 
+
+  <table>  
+    <tr>
+      <td>Username:&nbsp;</td>
+      <td width="100"><input id="username" size="20" type="text" name="username"></td>
+      <td width="400" align="left"><div id="status"></div></td>
+    </tr> 
+    </table>
+
+
+	<button onclick="loadData()">Submit</button>
+
+	<script>
+	
+	pic1 = new Image(16, 16); 
+	pic1.src = "loader.gif";
+
+	$(document).ready(function(){
+
+	$("#username").change(function() { 
+
+	var usr = $("#username").val();
+
+	if(usr.length >= 4)
+	{
+	$("#status").html('<img src="loader.gif" align="absmiddle">&nbsp;Checking availability...');
+
+	$.ajax({  
+	    type: "POST",  
+	    url: "ServletForPhp",  
+	    data: usr,  
+	    success: function(msg){  
+	   
+	    	console.log("msg: "+msg);
+	    	console.log(msg.trim() == 'OK');
+	   
+	   $("#status").ajaxComplete(function(event, request, settings){ 
+		   console.log("I am here before msg == 'OK'");
+		if(msg.trim() == 'OK')
+		{ 
+	        $("#username").removeClass('object_error'); // if necessary
+			$("#username").addClass("object_ok");
+			$(this).html('&nbsp;<img src="tick.gif" align="absmiddle">');
+		}  
+		else  
+		{  
+			$("#username").removeClass('object_ok'); // if necessary
+			$("#username").addClass("object_error");
+			$(this).html(msg);
+		}  
+	   
+	   });
+
+	 } 
+	   
+	  }); 
+
+	}
+	else
+		{
+		$("#status").html('<font color="red">The username should have at least <strong>4</strong> characters.</font>');
+		$("#username").removeClass('object_ok'); // if necessary
+		$("#username").addClass("object_error");
+		}
+
+	});
+
+	});
+
+//-----------------------------------------------------------------------
+	function loadData() {
+
+			var preciousMetals=10;
+			var artWorks=10;
+			var property=10;
+			var cleanmoney = 10000.0;
+			var dirtymoney = 10000.0;
+
+			var userid = document.getElementById('username').value;
+			var mystr = "{'userid':'" + userid + "','cleanmoney':'" + cleanmoney
+					+ "','dirtymoney':'" + dirtymoney + "','preciousMetals':'"
+					+ preciousMetals + "','property':'" 
+					+ property + "','artWorks':'" 
+					+ artWorks + "'}";
+
+			window.location.href = "SimpleLoginForm.html";
+
+			$.ajax({
+				url : "SimpleAccountView",
+				type : 'POST',
+				contentType : 'application/json',
+				data : mystr,
+				dataType : 'text',
+				
+				success : function(data) {
+					console.log("Communication succesful");	
+					console.log(mystr);
+					console.log(data);
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("Failed");
+						//alert(ajaxOptions);
+					} else {
+						//alert(xhr.status);
+					}
+				}
+			});
+			
+			$.ajax({
+				url : "TestServlet1",
+				type : 'GET',
+				dataType : 'text',
+				
+				success: function(data){
+					var type = typeof(data)
+					console.log(type);
+					console.log(data);
+				},
+			
+			error : function(xhr, ajaxOptions, thrownError) {
+				if(xhr.status == 200){
+					console.log("Failed");
+				} else {
+				//nothing to see here						
+				}	
+				
+			 }
+		});
+			
+	}
+	</script>
+	
+</body>
+</html>

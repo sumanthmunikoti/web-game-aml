@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HomePage</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Experiment starts here -->
+
+
+<link
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+<script type="text/javascript"
+	src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+<!-- Experiment ends here -->
+
+<style>
+table.table1 {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+table.table2 {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 40%;
+}
+
+table.table1 td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+table.logOutTable {
+	float: right;
+}
+
+table.chat {
+	float: right;
+}
+
+table.messageTable {
+	margin-right: 0px;
+	margin-left: auto;
+	width
+	=
+	50%;
+}
+
+table.transNotificationTable {
+	margin-right: 0px;
+	margin-left: auto;
+	width
+	=
+	50%;
+}
+
+table.reportTable {
+	margin-right: 0px;
+	margin-left: auto;
+	width = 50%;
+}
+
+.alignright {
+	text-align: right;
+}
+
+input#chat {
+	width: 410px
+}
+
+#console-container {
+	width: 400px;
+}
+
+#console {
+	border: 1px solid #CCCCCC;
+	border-right-color: #999999;
+	border-bottom-color: #999999;
+	height: 170px;
+	overflow-y: scroll;
+	padding: 5px;
+	width: 100%;
+	float: right;
+}
+
+#console p {
+	padding: 0;
+	margin: 0;
+}
+
+.chatBoxPosition {
+	position: absolute;
+	top: 50;
+	right: 0;
+}
+</style>
+</head>
+
+<body>
+
+	<table class="logOutTable">
+		<tr>
+			<td>
+				<!-- <button type="button" class="btn btn-primary" onClick="loadOptionsPage()">Launder Away</button> 
+					 <button type="button" class="btn btn-primary" onClick="loadSendMoneyPage()">Transact</button>
+					 <button type="button" class="btn btn-primary">Home</button>
+					 <button onClick="myReport()" class="btn btn-primary">Load Report</button>
+					 <button type="button" class="btn btn-primary" onClick="loadJunket()">Make Friends</button>
+					 <button onClick="loadTransactionNetwork()" class="btn btn-primary">Transact with Friends</button>-->
+
+
+				<button type="button" class="btn btn-primary" onClick="loadTheCopPage()">The Cop Page</button>
+				<button id="transNotifications" class="btn btn-primary"></button>
+				<button id="numNotifications" class="btn btn-primary"></button>
+				<button type="button" class="btn btn-primary"
+					onClick="killSession()">Log Out</button>
+
+			</td>
+		</tr>
+	</table>
+
+	<h2 id="welcome">Yo :</h2>
+
+	<br>
+	<table class="messageTable" id="messageTable">
+
+	</table>
+	<br>
+
+	<table class="transNotificationTable" id="transNotificationTable">
+		<tr>
+			<td></td>
+		</tr>
+	</table>
+
+	<div class="noscript">
+		<h2 style="color: #ff0000">Seems your browser doesn't support
+			Javascript! Websockets rely on Javascript being enabled. Please
+			enable Javascript and reload this page!</h2>
+	</div>
+
+
+	<div class="chatBoxPosition">
+		<p>
+			<input type="text" placeholder="type and press enter to chat"
+				id="chat" />
+		</p>
+		<div id="console-container">
+			<div id="console"></div>
+		</div>
+	</div>
+
+	<h4>Click on the prices buttons to input your own</h4>
+	<h4>prices for commodities</h4>
+
+	<table class="table2">
+		<caption>Assets owned by you</caption>
+		<tbody>
+			<tr>
+				<th>Clean Money</th>
+				<th>Dirty Money</th>
+				<th>Precious Metals</th>
+				<th>Precious metal price/unit</th>
+				<th>Property</th>
+				<th>Property price/unit</th>
+				<th>ArtWorks</th>
+				<th>ArtWork price/unit</th>
+			</tr>
+
+			<tr>
+				<td><p id="cm"></p></td>
+				<td><p id="dm"></p></td>
+				<td id="pm"></td>
+				<td id="pmp"></td>
+				<td id="ppty"></td>
+				<td id="pptyp"></td>
+				<td id="ar"></td>
+				<td id="arp"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p id="submitPrices"></p>
+
+
+	<!-- <input type="text" id="myInput" onkeyup="searchNamesFunction()" placeholder="Search for names.." title="Type in a name"> -->
+
+	<table class="table1" id="collaborators-list" class="buttons">
+
+		<caption>List of Collaborators</caption>
+
+		<tr>
+			<th>UserID</th>
+			<th>First Name</th>
+			<th>Clean Money</th>
+			<th>Dirty Money</th>
+			<th>Send Money</th>
+			<th>Precious Metals</th>
+			<th>Precious metal price/unit</th>
+			<th>Click to buy Precious Metals</th>
+
+			<th>Property</th>
+			<th>Property price/unit</th>
+			<th>Click to buy Property</th>
+
+			<th>ArtWorks</th>
+			<th>ArtWork price/unit</th>
+			<th>Click to buy Art Works</th>
+		</tr>
+
+	</table>
+
+	<table id="junkets-list" name="junkets-list" class="display"></table>
+
+	<table class="reportTable" id="reportTable" class="buttons">
+
+		<caption>Your report</caption>
+
+		<tr>
+			<th>
+			<td>Transaction ID
+			<td>
+			</th>
+			<th>
+			<td>Date
+			<td>
+			</th>
+			<th>
+			<td>Amount
+			<td>
+			</th>
+			<th>
+			<td>Sender
+			<td>
+			</th>
+			<th>
+			<td>Commodity
+			<td>
+			</th>
+			<th>
+			<td>Receiver
+			<td>
+			</th>
+			<th>
+			<td>Who Reported You?
+			<td>
+			</th>
+		</tr>
+
+		<tr>
+			<td id="tid"></td>
+			<td id="date"></td>
+			<td id="amt"></td>
+			<td id="sen"></td>
+			<td id="comm"></td>
+			<td id="rec"></td>
+			<td id="wry"></td>
+		</tr>
+
+	</table>
+
+
+	<script>
+	
+	var Chat = {};
+    var message;
+
+    Chat.socket = null;
+
+    Chat.connect = (function(host) {
+        if ('WebSocket' in window) {
+            Chat.socket = new WebSocket(host);
+        } else if ('MozWebSocket' in window) {
+            Chat.socket = new MozWebSocket(host);
+        } else {
+            Console.log('Error: WebSocket is not supported by this browser.');
+            return;
+        }
+
+        Chat.socket.onopen = function () {
+            //Console.log('Info: WebSocket connection opened.');
+            document.getElementById('chat').onkeydown = function(event) {
+                if (event.keyCode == 13) {
+                    Chat.sendMessage();
+                }
+            };
+        };
+
+        Chat.socket.onclose = function () {
+            document.getElementById('chat').onkeydown = null;
+            //Console.log('Info: WebSocket closed.');
+        };
+
+        Chat.socket.onmessage = function (message) {
+            Console.log(message.data);
+            
+            
+ //-----------------------------userlogdetails---------------------------
+        	
+			var today = new Date();
+			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			var dateTime = date+' '+time;
+			console.log(dateTime);
+			
+			var eventName = "Chat";
+			var value = message.data;
+			
+			var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+			
+			$.ajax({
+				url : "UserLogServlet",
+				type : 'POST',
+				contentType : 'application/json',
+				data : userLog,
+
+				success : function(data) {
+					console.log("Communication successful");
+					console.log(data);
+					var type = typeof (data);
+					console.log(type);
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("Failed");
+					} 
+				}
+			});
+
+//-----------------------------userlogdetails---------------------------
+            
+        };
+    });
+
+    Chat.initialize = function() {
+        if (window.location.protocol == 'http:') {
+            Chat.connect('ws://' + window.location.host + '/aml/aml/chat');
+        } else {
+            Chat.connect('wss://' + window.location.host + '/aml/aml/chat');
+        }
+    };
+
+    Chat.sendMessage = (function() {
+        message = document.getElementById('chat').value;
+        if (message != '') {
+            //Chat.socket.send(message);
+            document.getElementById('chat').value = '';
+          	var date= new Date();
+          	var strdate = date.getTime();
+          	console.log(strdate);
+          	
+   		$.ajax({
+   			url : "TestServlet2",
+   			type : 'POST',
+   			dataType : 'text',
+   			success : function(response) {
+   				var type = typeof (response);
+   				var sessionId = response.trim();
+   				//****************save sessionId as Global variable and use here!!***************************
+   				var str = "{'time':'" + strdate + "','message':'" + message + "','sessionId':'" + sessionId + "'}";
+	            	console.log("str: "+str);
+	            	Chat.socket.send(str);
+   			},
+   			error : function(xhr, ajaxOptions, thrownError) {
+   				if (xhr.status == 200) {
+   					console.log("error");
+   					console.log(xhr);
+   				} 
+   			}
+   		});
+           
+           	
+        }
+    });
+
+    var Console = {};
+
+    Console.log = (function(message) {
+        var console = document.getElementById('console');
+        var p = document.createElement('p');
+        p.style.wordWrap = 'break-word';
+        p.innerHTML = message;
+        console.appendChild(p);
+        while (console.childNodes.length > 25) {
+            console.removeChild(console.firstChild);
+        }
+        console.scrollTop = console.scrollHeight;
+    });
+
+    Chat.initialize();
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Remove elements with "noscript" class - <noscript> is not allowed in XHTML
+        var noscripts = document.getElementsByClassName("noscript");
+        for (var i = 0; i < noscripts.length; i++) {
+            noscripts[i].parentNode.removeChild(noscripts[i]);
+        }
+    }, false);
+
+
+//----------------------------------------The above is from chat.html-----------
+
+	
+	//The dataTables script starts here------------------------
+	
+//function loadJunket(){
+	var theArray = [];
+	
+		//userid: will be taken from the servlet
+	//key: "Make Friends", value:null------------> moved from here
+	
+	$.ajax({
+
+		url : "findJunkets",
+		type : 'POST',
+		contentType : 'application/json',
+		//data: mystr, -----> this is the type of data you send
+		dataType : 'text',
+		success : function(response) {
+			console.log("success");
+			var type = typeof (response);
+			response = JSON.parse(response);
+			
+			var j = 0;
+			
+			for (i = 0; i < response.length; i++) {
+
+				var jsoni = response[i];
+				var userid = jsoni.userid;
+				var inNetwork = jsoni.inNetwork;
+				var serialNumber = i+1;
+				var type = typeof (jsoni);
+				var serialString = serialNumber.toString();
+				
+				inNetwork = '<button style="width:100%" onclick="sendRequest(\'' + userid + '\')">'+ inNetwork + '</button>';
+				
+				var preArray = [];
+				
+				preArray.push(serialString);
+				preArray.push(userid);
+				preArray.push(inNetwork);
+				
+				theArray.push(preArray);
+				
+			}//end for
+			loadTable(theArray);
+		},
+
+		error : function(xhr, ajaxOptions, thrownError) {
+			//On error do this
+			if (xhr.status == 200) {
+				console.log("error junk if");
+				console.log(xhr);
+				//alert(ajaxOptions);
+			} else {
+				console.log("error junk else");
+				console.log(xhr);
+			}
+		}
+	});
+	
+	function loadTable(dataSet){
+		console.log("In loadTable function");
+		$(document).ready(function() {
+			$('#junkets-list').DataTable({
+				data : theArray,
+				columns : [ 
+				            {title : "Serial Num"}, 
+				            {title : "Name"}, 
+			                {title : "Click Button"},
+				]
+			});
+		});
+	}
+
+//-------------------------------------------------------------------------------------
+	
+	function myReport(){
+	
+	
+			$.ajax({
+					url : "MyReportServlet",
+					type : 'POST',
+					contentType : 'application/json',
+					//data : myStr,
+					dataType : 'text',
+					success : function(response) {
+						var type = typeof (response);
+						console.log(type);
+						console.log("response:");
+						console.log(response);
+						response = JSON.parse(response);
+
+						for (i = 0; i < response.length; i++) {
+
+							console.log("This i did save your ass: " + i);
+
+							var jsoni = response[i];
+							console.log(jsoni);
+
+							var transactionid = jsoni.transactionid;
+							var date = jsoni.date;
+							var commPrice = jsoni.commPrice;
+							var sender = jsoni.sender;
+							var commodity = jsoni.commodity;
+							var receiver = jsoni.receiver;
+							var type = jsoni.type;
+							
+							var wonOrLost;
+							
+							var x = document.getElementById(
+							'reportTable').insertRow(i + 1);
+							
+							if(type.trim() == "clean"){
+								wonOrLost = "Profit!!!";
+							}
+							else if(type.trim() == "dirty"){
+								wonOrLost = "You lost this!";
+							}
+							
+							var whoReported = jsoni.whoReported;
+							
+							var x = document.getElementById('reportTable')
+									.insertRow(i + 1);
+							
+												
+												var c1 = x.insertCell(0);
+												var c2 = x.insertCell(1);
+												var c3 = x.insertCell(2);
+												var c4 = x.insertCell(3);
+												var c5 = x.insertCell(4);
+												var c6 = x.insertCell(5);
+												var c7 = x.insertCell(6);
+												var c8 = x.insertCell(7);
+
+												c1.innerHTML = transactionid;
+												c2.innerHTML = date;
+												c3.innerHTML = commPrice;
+												c4.innerHTML = sender;
+												c5.innerHTML = commodity;
+												c6.innerHTML = receiver;
+												c7.innerHTML = whoReported;
+												c8.innerHTML = wonOrLost;
+												
+						}// end for
+					},
+	
+					error : function(xhr, ajaxOptions, thrownError) {
+						if (xhr.status == 200) {
+							console.log("error");
+							console.log(xhr);
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+							//alert(thrownError);
+						}
+					}
+				});
+
+
+	}//end function myReport()
+	
+	//----------------------------------------------------------------------------------------------------------------------------
+			function loadTheCopPage(){
+				window.location.href = "TheCopPage.html";
+			}		
+	
+	//----------acceptPayment() method accepts money from the sender and sends the commodity to the sender---------
+	
+			function acceptPayment(userDetails){
+				
+				var splitStr = userDetails.split(",");
+				
+				console.log("In the acceptPayment function now");
+				console.log("sender: " + splitStr[0]);
+				console.log("commodity: " + splitStr[1]);
+				console.log("commPrice: " + splitStr[2]);
+				console.log("type: "+splitStr[3]);
+				
+				var sender = splitStr[0];
+				var commodity = splitStr[1];
+				var commPrice = splitStr[2];
+				var type = splitStr[3];
+				
+				var myStr = "{'sender':'" + sender + "','commodity':'" + commodity + "','commPrice':'" + commPrice+ "','type':'" + type+"','reported':'no'}";
+				
+				if (confirm("Are you sure you want to sell your "+commodity+" to "+sender+ " at "+commPrice)) {
+					
+					//userid: from servlet
+					//key: "Accept transaction of "commodity, value: "commPrice", 
+					
+					
+	//-----------------------------userlogdetails---------------------------
+	
+					var today = new Date();
+					var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTime = date+' '+time;
+					console.log(dateTime);
+					
+					var eventName = "Accept transaction of "+commodity;
+					var value = ""+commPrice;
+					
+					var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+					
+					$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("Communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+
+	
+	//-----------------------------userlogdetails---------------------------
+	//--------Connects to servlet which changes status to 'confirmed' from 'waiting'--------------------------------
+					
+					$.ajax({
+								url : "DetailedTransactionsServlet",
+								type : 'POST',
+								contentType : 'application/json',
+								data : myStr,
+								dataType : 'text',
+								success : function(response) {
+									//On ajax success do this
+									var type = typeof (response);
+									console.log(type);
+									console.log("response:");
+									console.log(response);
+						
+								},
+						
+								error : function(xhr, ajaxOptions, thrownError) {
+									//On error do this
+									if (xhr.status == 200) {
+										console.log("error");
+										console.log(xhr);
+										//alert(ajaxOptions);
+									} else {
+										//alert(xhr.status);
+										//alert(thrownError);
+									}
+								}
+							});
+
+		
+					$.ajax({
+							url : "ChangeTransactionStatus",
+							type : 'POST',
+							contentType : 'application/json',
+							data : myStr,
+							dataType : 'text',
+							success : function(response) {
+								//On ajax success do this
+								var type = typeof (response);
+								console.log(type);
+								console.log("response:");
+								console.log(response);
+						
+							},
+						
+							error : function(xhr, ajaxOptions, thrownError) {
+								//On error do this
+								if (xhr.status == 200) {
+									console.log("error");
+									console.log(xhr);
+									//alert(ajaxOptions);
+								} else {
+									//alert(xhr.status);
+									//alert(thrownError);
+								}
+							}
+						});
+
+								
+					window.location.reload();
+		
+				}
+				
+			}
+		
+			//------------------------------------------------------------------------------------------------------------------
+			
+			function loadAlert(user){
+				if (confirm("Are you sure you want to collaborate with "+user)) {
+					
+						//-----------------------------userlogdetails---------------------------
+	
+					var today = new Date();
+					var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTime = date+' '+time;
+					console.log(dateTime);
+					
+					var eventName = "Accept request of ";
+					var value = user;
+					
+					var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+					
+					$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("Communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+
+	
+	//-----------------------------userlogdetails---------------------------
+	//--------Connects to servlet which changes status to 'confirmed' from 'waiting'-------------------------------------------------
+		
+		 			window.location.reload();
+					
+					$.ajax({
+						url : "ChangeStatus",
+						type : 'POST',
+						contentType : 'text',
+						data : user,
+						dataType : 'text',
+						success : function(response) {
+							//On ajax success do this
+							var type = typeof (response);
+							console.log(type);
+							console.log("response:");
+							console.log(response);
+		
+						},
+		
+						error : function(xhr, ajaxOptions, thrownError) {
+							//On error do this
+							if (xhr.status == 200) {
+								console.log("error");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								//alert(xhr.status);
+								//alert(thrownError);
+							}
+						}
+					});
+					
+					$.ajax({
+						url : "TablesConnectServlet",
+						type : 'GET',
+						dataType : 'text',
+						success : function(response) {
+							//On ajax success do this
+							var type = typeof (response);
+							console.log(type);
+							console.log("response:");
+							console.log(response);
+
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							//On error do this
+							if (xhr.status == 200) {
+								console.log("error");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								//alert(xhr.status);
+								//alert(thrownError);
+							}
+						}
+					});
+
+					alert("" + user + " is now your accomplice");
+				}
+			}
+		
+	
+	//-----------------------------------------------------------------------------------------------------------
+	setInterval (transactionRequests, 5000);
+	var notifCounter = 0;
+	var requestFromUserid = '';
+	//setInterval (collaborationRequests, 8000);		
+	//-----------------------------------------------------------------------------------------------------------
+	function transactionRequests(){
+		
+		$
+			.ajax({
+				url : "TransNotificationServlet",
+				type : 'POST',
+				contentType : 'application/json',
+				dataType : 'text',
+				success : function(response) {
+					console.log("success");
+					var type = typeof (response);
+					console.log(response);
+					console.log(type);
+					response = JSON.parse(response);
+					
+					if (notifCounter == 0){
+						console.log("counter: "+counter);
+						
+						document.getElementById("transNotifications").innerHTML = "You have "
+								+ response.length + " transaction request(s)";
+			
+						for (i = 0; i < response.length; i++) {
+			
+							var jsoni = response[i];
+							//console.log(jsoni);
+							requestFromUserid = jsoni.transactionNotification.trim();
+							var commodity = jsoni.commodity;
+							var commPrice = jsoni.commPrice;
+							var type = jsoni.type;
+			
+							//console.log(i);
+							//console.log(requestFromUserid);
+			
+							var table = document.getElementById('transNotificationTable');
+							var row = table.insertRow(0);
+							var cell = row.insertCell(0);
+							cell.innerHTML = '<button style="width:100%" button id ="\''
+									+ requestFromUserid
+									+ '\') " onclick="acceptPayment(\''
+									+ requestFromUserid + ',' + commodity + ',' + commPrice +',' + type
+									+ '\')">'
+									+ "You have a transaction request from "
+									+ requestFromUserid + '</button>';
+									
+							notifCounter++;
+			
+						}//end for 
+			
+					}
+					
+					else if((notifCounter > 0) && (notifCounter<3)) {
+								document.getElementById("transNotifications").innerHTML = "You have "
+									+ response.length + " transaction request(s)";
+				
+							for (i = 0; i < response.length; i++) {
+				
+								var jsoni = response[i];
+								var latestRequestFromUserid = jsoni.transactionNotification.trim();
+								
+								console.log("latestRequestFromUserid: "+latestRequestFromUserid);
+								console.log("requestFromUserid: "+requestFromUserid);
+								console.log("notifCounter: "+notifCounter);
+								
+								//console.log(jsoni);
+								
+							if(latestRequestFromUserid != requestFromUserid){	
+								requestFromUserid = jsoni.transactionNotification.trim();
+								var commodity = jsoni.commodity;
+								var commPrice = jsoni.commPrice;
+								var type = jsoni.type;
+				
+								//console.log(i);
+								//console.log(requestFromUserid);
+				
+								var table = document.getElementById('transNotificationTable');
+								var row = table.insertRow(0);
+								var cell = row.insertCell(0);
+								
+								cell.innerHTML = '<button style="width:100%" button id ="\''
+										+ requestFromUserid
+										+ '\') " onclick="acceptPayment(\''
+										+ requestFromUserid + ',' + commodity + ',' + commPrice +',' + type
+										+ '\')">'
+										+ "You have a transaction request from "
+										+ requestFromUserid + '</button>';						
+							}
+							notifCounter++;
+						}//end for
+					}
+					
+				},
+		
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+	}		
+	//}
+		
+		//This must run as soon as this page is loaded---------------------------------------------------------------------
+		
+		//function collaborationRequests(){
+		$
+			.ajax({
+				url : "NotificationServlet",
+				type : 'POST',
+				contentType : 'application/json',
+				dataType : 'text',
+				success : function(response) {
+					console.log("success");
+					var type = typeof (response);
+					console.log(response);
+					console.log(type);
+					response = JSON.parse(response);
+					document.getElementById("numNotifications").innerHTML = "You have "
+							+ response.length + " notification(s)";
+		
+					for (i = 0; i < response.length; i++) {
+		
+						console.log(i);
+						var jsoni = response[i];
+						console.log(jsoni);
+						var requestFromUserid = jsoni.requestNotificationUser;
+						var type = typeof (jsoni);
+		
+						console.log(i);
+						console.log(requestFromUserid);
+		
+						var table = document.getElementById('messageTable');
+						var row = table.insertRow(0);
+						var cell = row.insertCell(0);
+						cell.innerHTML = '<button style="width:100%" button id ="\''
+								+ requestFromUserid
+								+ '\') " onclick="loadAlert(\''
+								+ requestFromUserid
+								+ '\')">'
+								+ "You have a collaboration request from "
+								+ requestFromUserid + '</button>';
+		
+					}//end for 
+				},
+		
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("error junk if");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						console.log("error junk else");
+						console.log(xhr);
+					}
+				}
+			});
+			
+		//}
+
+	//------------------------------------------------------------------------------------------------------------
+	
+	function killSession(){
+		
+		if (confirm("Are you sure you want to Log out?!")) {
+			
+			
+		$.ajax({
+			url : "LogOut",
+			type : 'POST',
+			contentType : 'text',
+			data : 'yo',
+			dataType : 'text',
+			success : function(response) {
+
+				var type = typeof (response);
+				console.log(type);
+				console.log("response: " + response);
+
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});// end of  AJAX!!!!!!
+		
+		window.location.href = "loginform.html";
+		}
+	}
+	//------------------------------------------------
+	var counter = 0;
+	
+	function editPrices(commodityDetails){
+		
+		var splitStr = commodityDetails.split(",");
+		
+		var preciousMetalsPrice = splitStr[0];
+		var propertyPrice = splitStr[1];
+		var artPrice = splitStr[2];
+		
+		console.log("preciousMetalsPrice: " + splitStr[0]);
+		console.log("propertyPrice: "+ splitStr[1]);
+		console.log("artPrice: "+ splitStr[2]);
+		
+		
+		//-----------------------------userlogdetails---------------------------
+		
+		var today = new Date();
+		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+		var dateTime = date+' '+time;
+		console.log(dateTime);
+		
+		var eventName = "Edit Prices Button";
+		var value = ""+preciousMetalsPrice +"," + propertyPrice +","+ artPrice ;
+		
+		var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+		
+		$.ajax({
+			url : "UserLogServlet",
+			type : 'POST',
+			contentType : 'application/json',
+			data : userLog,
+
+			success : function(data) {
+				console.log("Communication successful");
+				console.log(data);
+				var type = typeof (data);
+				console.log(type);
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				if (xhr.status == 200) {
+					console.log("Failed");
+				} 
+			}
+		});
+
+
+//-----------------------------userlogdetails---------------------------
+
+		
+		document.getElementById('pmp').innerHTML = "<input id=\"inputPmp\" type=\"text\" value=\""+preciousMetalsPrice+"\">"; 
+		document.getElementById('pptyp').innerHTML = "<input id=\"inputPptyp\" type=\"text\" value=\""+propertyPrice+"\">"; 
+		document.getElementById('arp').innerHTML = "<input id=\"inputArp\" type=\"text\" value=\""+artPrice+"\">"; 
+		
+		//document.getElementById("editPricesButton").innerHTML = "Submit";
+		document.getElementById('submitPrices').innerHTML="<button onClick = \"submitPrices()\" class=\"btn btn-primary\">Submit Prices</button>";
+
+			
+		}
+
+		//-------------------------------------------------------------------------------------------------------
+
+		function submitPrices() {
+
+			console.log("dynamic inputPmp: "
+					+ document.getElementById('inputPmp').value);
+			console.log("dynamic inputPptyp: "
+					+ document.getElementById('inputPptyp').value);
+			console.log("dynamic inputarp: "
+					+ document.getElementById('inputArp').value);
+
+			var preciousMetalsPrice = document.getElementById('inputPmp').value;
+			var propertyPrice = document.getElementById('inputPptyp').value;
+			var artPrice = document.getElementById('inputArp').value;
+
+			var pricesStr = "{'preciousMetalsPrice':'" + preciousMetalsPrice
+					+ "','propertyPrice':'" + propertyPrice 
+					+ "','artPrice':'" + artPrice + "'}";
+					
+					
+//-----------------------------userlogdetails---------------------------
+					
+					var today = new Date();
+					var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTime = date+' '+time;
+					console.log(dateTime);
+					
+					var eventName = "Submit Price Button";
+					var value = ""+preciousMetalsPrice +"," + propertyPrice +","+ artPrice ;
+					
+					var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+					
+					$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("Communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+
+	
+	//-----------------------------userlogdetails---------------------------
+
+if ((preciousMetalsPrice > 0) && (propertyPrice > 0) && (artPrice > 0)){
+	
+			//ajax call to updatePricesServlet
+
+			$.ajax({
+				url : "PriceUpdateServlet", //do not forget to update
+				type : 'POST',
+				contentType : 'application/json',
+				data : pricesStr,
+				dataType : 'text',
+				success : function(response) {
+
+					var type = typeof (response);
+					console.log(type);
+					console.log("response: " + response);
+
+				},
+
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("error");
+						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						//alert(xhr.status);
+						//alert(thrownError);
+					}
+				}
+			});// end of AJAX!!!!!!
+
+			window.location.reload();
+			alert("The new prices have been updated!");
+			}
+	
+	else{
+			alert ("Please input a valid price!");
+		}
+}
+	
+		//--------------------------------------------------------------------------------------------------------
+
+		$
+				.ajax({
+					url : "accountView",
+					type : 'POST',
+					contentType : 'application/json',
+					dataType : 'text',
+					success : function(response) {
+
+						var type = typeof (response);
+						console.log(type);
+						console.log("response:");
+						console.log(response);
+						response = JSON.parse(response);
+
+						var cleanmoney = response.cleanmoney;
+						var dirtymoney = response.dirtymoney;
+						var preciousMetals = response.preciousMetals;
+						var preciousMetalsPrice = response.preciousMetalsPrice;
+						var property = response.property;
+						var propertyPrice = response.propertyPrice;
+						var artWorks = response.artWorks;
+						var artPrice = response.artPrice;
+
+						var pmp = "pmp";
+						var pptyp = "pptyp";
+						var arp = "arp";
+
+						document.getElementById("cm").innerHTML = cleanmoney;
+						document.getElementById("dm").innerHTML = dirtymoney;
+
+						document.getElementById("pm").innerHTML = preciousMetals;
+						document.getElementById("pmp").innerHTML = '<button style="width:100%" onclick="editPrices(\''
+								+ preciousMetalsPrice
+								+ ','
+								+ propertyPrice
+								+ ','
+								+ artPrice
+								+ '\')">'
+								+ preciousMetalsPrice + '</button>';
+						document.getElementById("ppty").innerHTML = property;
+						document.getElementById("pptyp").innerHTML = '<button style="width:100%" onclick="editPrices(\''
+								+ preciousMetalsPrice
+								+ ','
+								+ propertyPrice
+								+ ','
+								+ artPrice
+								+ '\')">'
+								+ propertyPrice + '</button>';
+						document.getElementById("ar").innerHTML = artWorks;
+						document.getElementById("arp").innerHTML = '<button style="width:100%" onclick="editPrices(\''
+								+ preciousMetalsPrice
+								+ ','
+								+ propertyPrice
+								+ ','
+								+ artPrice
+								+ '\')">'
+								+ artPrice + '</button>';
+					},
+
+					error : function(xhr, ajaxOptions, thrownError) {
+						//On error do this
+						if (xhr.status == 200) {
+							console.log("error");
+							console.log(xhr);
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+							//alert(thrownError);
+						}
+					}
+				});
+
+		//------------------------function to buy commodities using either clean money or dirty money---------------------------------------------------
+
+		function buyComm(commodityDetails) {
+			
+			var splitStr = commodityDetails.split(",");
+
+			console.log("splitStr: " + splitStr);
+
+			console.log("commPrice: " + splitStr[0]);
+			console.log("userid: " + splitStr[1]);
+			console.log("commodity: " + splitStr[2]);
+			console.log("money: " + splitStr[3]);
+			console.log("type: " + splitStr[4]);
+			console.log("commQtyName: " + splitStr[5]);
+			console.log("i: " + splitStr[6]);
+
+			var commPrice = splitStr[0];
+			var userid = splitStr[1];
+			var commodity = splitStr[2];
+			var money = splitStr[3];
+			var type = splitStr[4].trim();
+			var commQtyName = splitStr[5];
+			var i = splitStr[6];
+			
+			//ajax call to see if any requests have already been sent
+			//continue the execution of the program if all status = 'confirmed' 
+			
+			$.ajax({
+				url : "FetchTransactionStatusServlet",
+				type : 'POST',
+				contentType : 'application/json',
+				data : userid,
+
+				success : function(response) {
+					console.log("Communication successful");
+					console.log(response);
+					if (response.trim()=="waiting"){
+						
+						console.log("Helloooooooo!!!!!");
+						alert ("The last transaction has not been approved yet!");						
+						return;			
+					}
+					
+					else {
+						
+							//Loop de loop: Bad code design here
+							
+						//Initializing cleanmoney and dirtymoney values.
+						//-------------Ajax call to retrieve clean and dirty money values of the user---
+						
+						$
+								.ajax({
+									url : "accountView",
+									type : 'POST',
+									contentType : 'application/json',
+									dataType : 'text',
+									success : function(response) {
+
+										response = JSON.parse(response);
+										var responseType = typeof (response);
+
+										var cleanmoney = response.cleanmoney;
+										var dirtymoney = response.dirtymoney;
+
+										console.log("cleanmoney: " + cleanmoney);
+										console.log("dirtymoney: " + dirtymoney);
+
+										var commQty = document
+												.getElementsByName(commQtyName)[i].value;
+										//commQty is the qty of comm the user wants to buy
+										commPrice = commPrice * commQty;
+										console.log("Total commPrice: " + commPrice);
+										console.log("commQty: " + commQty);
+
+										// if condition here: buy if _____ > 1  
+										if (confirm("Are you sure you want to buy "
+												+ commodity + " from " + userid + " ?")) {
+
+											alert("You have now offered to buy " + commQty
+													+ " unit(s) of " + commodity + " at "
+													+ commPrice + " units of " + type
+													+ " money from " + userid);
+
+											if (type == "clean") {
+
+												if (cleanmoney >= commPrice) {
+													
+						//-----------------------------userlogdetails---------------------------
+				
+								var today = new Date();
+								var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+								var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+								var dateTime = date+' '+time;
+								console.log(dateTime);
+								
+								var eventName = "buy "+commodity+ " with clean money";
+								var value = "at "+commPrice;
+								
+								var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+								
+								$.ajax({
+									url : "UserLogServlet",
+									type : 'POST',
+									contentType : 'application/json',
+									data : userLog,
+
+									success : function(data) {
+										console.log("Communication successful");
+										console.log(data);
+										var type = typeof (data);
+										console.log(type);
+									},
+
+									error : function(xhr, ajaxOptions, thrownError) {
+										if (xhr.status == 200) {
+											console.log("Failed");
+										} 
+									}
+								});
+
+				//-----------------------------userlogdetails---------------------------
+
+													var useridStr = "{'receiver':'"
+															+ userid.trim()
+															+ "','commPrice':'"
+															+ commPrice
+															+ "','commodity':'"
+															+ commodity
+															+ "','commQty':'"
+															+ commQty
+															+ "','status':'waiting','type':'clean'}";
+
+													console.log("useridStr: " + useridStr);
+
+													$.ajax({
+														url : "TransactionServlet",
+														type : 'POST',
+														contentType : 'application/json',
+														data : useridStr,
+														dataType : 'text',
+														success : function(response) {
+															console.log(response);
+														},
+
+														error : function(xhr, ajaxOptions,
+																thrownError) {
+															if (xhr.status == 200) {
+																console.log("error");
+																console.log(xhr);
+																//alert(ajaxOptions);
+															} else {
+																//alert(xhr.status);
+															}
+														}
+													});
+
+												}//ends here
+
+												else {
+													
+						//-----------------------------userlogdetails---------------------------
+				
+								var today = new Date();
+								var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+								var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+								var dateTime = date+' '+time;
+								console.log(dateTime);
+								
+								var eventName = "Not enough clean money";
+								var value = commPrice;
+								
+								var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+								
+								$.ajax({
+									url : "UserLogServlet",
+									type : 'POST',
+									contentType : 'application/json',
+									data : userLog,
+
+									success : function(data) {
+										console.log("Communication successful");
+										console.log(data);
+										var type = typeof (data);
+										console.log(type);
+									},
+
+									error : function(xhr, ajaxOptions, thrownError) {
+										if (xhr.status == 200) {
+											console.log("Failed");
+										} 
+									}
+								});
+
+				
+				//-----------------------------userlogdetails---------------------------
+
+													
+								
+					alert("You do not have sufficient amount of clean money to complete this kinda transaction!")
+												}
+											}
+
+											else if (type == "dirty") {
+
+												if (dirtymoney >= commPrice) {
+													
+
+								//-----------------------------userlogdetails---------------------------
+				
+								var today = new Date();
+								var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+								var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+								var dateTime = date+' '+time;
+								console.log(dateTime);
+								
+								var eventName = "buy "+commodity+ " with dirty money";
+								var value = "at "+commPrice;
+								
+								var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+								
+								$.ajax({
+									url : "UserLogServlet",
+									type : 'POST',
+									contentType : 'application/json',
+									data : userLog,
+
+									success : function(data) {
+										console.log("Communication successful");
+										console.log(data);
+										var type = typeof (data);
+										console.log(type);
+									},
+
+									error : function(xhr, ajaxOptions, thrownError) {
+										if (xhr.status == 200) {
+											console.log("Failed");
+										} 
+									}
+								});
+
+				
+				//-----------------------------userlogdetails---------------------------
+
+
+													var useridStr = "{'receiver':'"
+															+ userid.trim()
+															+ "','commPrice':'"
+															+ commPrice
+															+ "','commodity':'"
+															+ commodity
+															+ "','commQty':'"
+															+ commQty
+															+ "','status':'waiting','type':'dirty'}";
+
+													//Ajax call needs to send "userid" and "commPrice"
+													$.ajax({
+														url : "TransactionServlet",
+														type : 'POST',
+														contentType : 'application/json',
+														data : useridStr,
+														dataType : 'text',
+														success : function(response) {
+															console.log(response);
+														},
+
+														error : function(xhr, ajaxOptions,
+																thrownError) {
+															if (xhr.status == 200) {
+																console.log("error");
+																console.log(xhr);
+																//alert(ajaxOptions);
+															} else {
+																//alert(xhr.status);
+															}
+														}
+													});
+
+												}//end if(dirtymoney>=commPrice)
+
+												else {
+													
+				//-----------------------------userlogdetails---------------------------
+				
+								var today = new Date();
+								var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+								var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+								var dateTime = date+' '+time;
+								console.log(dateTime);
+								
+								var eventName = "Not enough dirty money";
+								var value = commPrice;
+								
+								var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+								
+								$.ajax({
+									url : "UserLogServlet",
+									type : 'POST',
+									contentType : 'application/json',
+									data : userLog,
+
+									success : function(data) {
+										console.log("Communication successful");
+										console.log(data);
+										var type = typeof (data);
+										console.log(type);
+									},
+
+									error : function(xhr, ajaxOptions, thrownError) {
+										if (xhr.status == 200) {
+											console.log("Failed");
+										} 
+									}
+								});
+
+				
+				//-----------------------------userlogdetails---------------------------
+
+													
+													
+					alert("You do not have sufficient amount of dirty money to complete this kinda transaction!")
+												}//end else part of (dirtymoney>=comm)
+											}// end else if (type==dirty)
+
+										}
+									},
+
+									error : function(xhr, ajaxOptions, thrownError) {
+										//On error do this
+										if (xhr.status == 200) {
+											console.log("error");
+											console.log(xhr);
+											//alert(ajaxOptions);
+										} else {
+											//alert(xhr.status);
+											//alert(thrownError);
+										}
+									}
+								});
+						
+						
+						}
+					},
+			
+				error : function(xhr, ajaxOptions, thrownError) {
+					if (xhr.status == 200) {
+						console.log("Failed");
+					} 
+				}
+			});
+
+		}
+		
+		//---------------------------------------------------------------------------------------------------
+		
+		function sendMoney(moneyDetails) {
+
+		var splitStr = moneyDetails.split(",");
+
+		console.log("splitStr: " + splitStr);
+
+		console.log("userid: " + splitStr[0]);
+		console.log("money: " + splitStr[1]);
+		console.log("type: " + splitStr[2]);
+		console.log("i: " + splitStr[3]);
+
+		var userid = splitStr[0];
+		var money = splitStr[1];
+		var type = splitStr[2].trim();
+		var i = splitStr[3];
+		
+		//-------------Ajax call to retrieve clean and dirty money values of the user---
+
+		$
+				.ajax({
+					url : "accountView",
+					type : 'POST',
+					contentType : 'application/json',
+					dataType : 'text',
+					success : function(response) {
+
+						response = JSON.parse(response);
+						var responseType = typeof (response);
+
+						var cleanmoney = response.cleanmoney;
+						var dirtymoney = response.dirtymoney;
+						var sendMoney = "sendMoney";
+
+						console.log("cleanmoney: " + cleanmoney);
+						console.log("dirtymoney: " + dirtymoney);
+
+						var amount = document.getElementsByName(sendMoney)[i].value;
+						//var amount = document.getElementById('i').value;
+						
+						if (confirm("Are you sure you want to send "
+								+ amount + " unit(s) of " +type+ " money to " + userid + " ?")) {
+
+							if (type == "clean") {
+								
+								var type1 = typeof(cleanmoney);
+								var type2 = typeof(amount);
+								console.log("type1: "+type1);
+								console.log("type2: "+type2);
+								console.log("parsing begins here");
+								var cleanmoney = parseInt(cleanmoney);
+								var amount = parseInt(amount);
+								var type3 = typeof(cleanmoney);
+								var type4 = typeof(amount);
+								console.log("type3: "+type3);
+								console.log("type4: "+type4);
+								console.log("cleanmoney >= amount: "+(cleanmoney >= amount));
+								
+								if (cleanmoney >= amount) {
+								
+									
+		//-----------------------------userlogdetails---------------------------
+	
+					var today = new Date();
+					var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTime = date+' '+time;
+					console.log(dateTime);
+					
+					var eventName = "Send Clean Money";
+					var value = amount;
+					
+					var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+					
+					$.ajax({
+						url : "UserLogServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						data : userLog,
+
+						success : function(data) {
+							console.log("Communication successful");
+							console.log(data);
+							var type = typeof (data);
+							console.log(type);
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("Failed");
+							} 
+						}
+					});
+
+	
+	//-----------------------------userlogdetails---------------------------
+									
+									
+									alert("You have now sent " + amount
+											+ " unit(s) of " + type + " money to " + userid);
+										//code here to insert detailed transactions in the aml.detailedtransactions table via SentMoneyDetails servlet
+									
+									var sentMoneyDetailsString = "{'receiver':'"
+										+ userid.trim()
+										+ "','commPrice':'"
+										+ amount
+										+ "','commodity':'NA','type':'clean','reported':'no'}"; 
+										
+										$.ajax({
+											url : "SentMoneyDetails",
+											type : 'POST',
+											contentType : 'application/json',
+											data : sentMoneyDetailsString,
+											dataType : 'text',
+											success : function(response) {
+												console.log(response);
+											},
+
+											error : function(xhr, ajaxOptions,
+													thrownError) {
+												if (xhr.status == 200) {
+													console.log("error");
+													console.log(xhr);
+													//alert(ajaxOptions);
+												} else {
+													//alert(xhr.status);
+												}
+											}
+										});
+									
+								 //---------------------------------------------------------------------------------------------------
+
+									var useridStr = "{'receiver':'"
+											+ userid.trim()
+											+ "','commPrice':'"
+											+ amount
+											+ "','commodity':'NA','commQty':'1','status':'confirmed','type':'clean'}";
+
+									console.log("useridStr: " + useridStr);
+
+									$.ajax({
+										url : "SendMoneyServlet",
+										type : 'POST',
+										contentType : 'application/json',
+										data : useridStr,
+										dataType : 'text',
+										success : function(response) {
+											console.log(response);
+										},
+
+										error : function(xhr, ajaxOptions,
+												thrownError) {
+											if (xhr.status == 200) {
+												console.log("error");
+												console.log(xhr);
+												//alert(ajaxOptions);
+											} else {
+												//alert(xhr.status);
+											}
+										}
+									});
+
+								}//ends here
+
+								else {
+									alert("You do not have sufficient amount of clean money to complete this kinda transaction!")
+								}
+							}
+							//------------------------------
+							else if (type == "dirty") {
+
+								var type1 = typeof(dirtymoney);
+								var type2 = typeof(amount);
+								console.log("type1: "+type1);
+								console.log("type2: "+type2);
+								console.log("parsing begins here");
+								var dirtymoney = parseInt(dirtymoney);
+								var amount = parseInt(amount);
+								var type3 = typeof(dirtymoney);
+								var type4 = typeof(amount);
+								console.log("type3: "+type3);
+								console.log("type4: "+type4);
+								console.log("dirtymoney >= amount: "+(dirtymoney >= amount));
+								
+								if (dirtymoney >= amount) {
+									
+				//-----------------------------userlogdetails---------------------------
+									
+									var today = new Date();
+									var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+									var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+									var dateTime = date+' '+time;
+									console.log(dateTime);
+									
+									var eventName = "Send Dirty Money";
+									var value = amount;
+									
+									var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+									
+									$.ajax({
+										url : "UserLogServlet",
+										type : 'POST',
+										contentType : 'application/json',
+										data : userLog,
+
+										success : function(data) {
+											console.log("Communication successful");
+											console.log(data);
+											var type = typeof (data);
+											console.log(type);
+										},
+
+										error : function(xhr, ajaxOptions, thrownError) {
+											if (xhr.status == 200) {
+												console.log("Failed");
+											} 
+										}
+									});
+
+					
+				//-----------------------------userlogdetails---------------------------									
+									//starts here
+									alert("You have now sent " + amount
+											+ " unit(s) of " + type + " money to " + userid);
+									//code here to insert detailed transactions in the aml.detailedtransactions table via SentMoneyDetails servlet
+									
+									var sentMoneyDetailsString = "{'receiver':'"
+										+ userid.trim()
+										+ "','commPrice':'"
+										+ amount
+										+ "','commodity':'NA','type':'dirty','reported':'no'}"; 
+										
+										$.ajax({
+											url : "SentMoneyDetails",
+											type : 'POST',
+											contentType : 'application/json',
+											data : sentMoneyDetailsString,
+											dataType : 'text',
+											success : function(response) {
+												console.log(response);
+											},
+
+											error : function(xhr, ajaxOptions,
+													thrownError) {
+												if (xhr.status == 200) {
+													console.log("error");
+													console.log(xhr);
+													//alert(ajaxOptions);
+												} else {
+													//alert(xhr.status);
+												}
+											}
+										});
+									
+									
+								 //---------------------------------------------------------------------------------------------------
+
+
+									var useridStr = "{'receiver':'"
+											+ userid.trim()
+											+ "','commPrice':'"
+											+ amount
+											+ "','commodity':'NA','commQty':'1','status':'confirmed','type':'dirty'}";
+
+									//Ajax call needs to send "userid" and "commPrice"
+									$.ajax({
+										url : "SendMoneyServlet",
+										type : 'POST',
+										contentType : 'application/json',
+										data : useridStr,
+										dataType : 'text',
+										success : function(response) {
+											console.log(response);
+										},
+
+										error : function(xhr, ajaxOptions,
+												thrownError) {
+											if (xhr.status == 200) {
+												console.log("error");
+												console.log(xhr);
+												//alert(ajaxOptions);
+											} else {
+												//alert(xhr.status);
+											}
+										}
+									});
+
+								}//end if(dirtymoney>=commPrice)
+
+								else {
+									alert("You do not have sufficient amount of dirty money to complete this kinda transaction!")
+								}//end else part of (dirtymoney>=comm)
+							}// end else if (type==dirty)
+
+						}
+					},
+
+					error : function(xhr, ajaxOptions, thrownError) {
+						//On error do this
+						if (xhr.status == 200) {
+							console.log("error");
+							console.log(xhr);
+							//alert(ajaxOptions);
+						} else {
+							//alert(xhr.status);
+							//alert(thrownError);
+						}
+					}
+				});
+
+	}
+
+
+		//------------------------function to load the people in the transaction network--------------------
+
+		//function loadTransactionNetwork() {
+			console.log("clicked button");
+			
+			$
+					.ajax({
+						url : "CollaboratorServlet",
+						type : 'POST',
+						contentType : 'application/json',
+						dataType : 'text',
+						success : function(response) {
+							console.log("success");
+							var type = typeof (response);
+							console.log(response);
+							console.log(type);
+							response = JSON.parse(response);
+
+							for (i = 0; i < response.length; i++) {
+
+								console.log("This i did save your ass: " + i);
+
+								var jsoni = response[i];
+								console.log(jsoni);
+
+								var userid = jsoni.userid;
+								var first_name = jsoni.first_name;
+								var clean_money = jsoni.clean_money;
+								var dirty_money = jsoni.dirty_money;
+								var preciousMetals = jsoni.preciousMetals;
+								var preciousMetalsPrice = jsoni.preciousMetalsPrice;
+								var property = jsoni.property;
+								var propertyPrice = jsoni.propertyPrice;
+								var artWorks = jsoni.artWorks;
+								var artPrice = jsoni.artPrice;
+
+								var x = document.getElementById(
+										'collaborators-list').insertRow(i + 1);
+
+								var c1 = x.insertCell(0);
+								var c2 = x.insertCell(1);
+								var c3 = x.insertCell(2);
+								var c4 = x.insertCell(3);
+								var c5 = x.insertCell(4);
+								var c6 = x.insertCell(5);
+								var c7 = x.insertCell(6);
+								var c8 = x.insertCell(7);
+								var c9 = x.insertCell(8);
+								var c10 = x.insertCell(9);
+								var c11 = x.insertCell(10);
+								var c12 = x.insertCell(11);
+								var c13 = x.insertCell(12);
+								var c14 = x.insertCell(13);
+
+								var artWork = "artWorks";
+
+								c1.innerHTML = userid;
+								c2.innerHTML = first_name;
+								c3.innerHTML = clean_money;
+								c4.innerHTML = dirty_money;
+								c5.innerHTML = '<input type="number" name="sendMoney" value="1" min="1"><input type="submit" value="Send Clean Money" onclick="sendMoney(\''
+									+ userid
+									+ ','
+									+ clean_money
+									+ ','
+									+ "clean"
+									+ ','
+									+ i
+									+ '\')"><input type="submit" value="Send Dirty Money" onclick="sendMoney(\''
+									+ userid
+									+ ','
+									+ dirty_money
+									+ ','
+									+ "dirty"
+									+ ','
+									+ i
+									+ '\')">';
+									
+								c6.innerHTML = preciousMetals;
+								c7.innerHTML = preciousMetalsPrice;
+
+								if (preciousMetals>0){
+								
+								c8.innerHTML = '<input type="number" name="preciousMetalsQuantity" value="1" min="1" max="'+preciousMetals+'"><input type="submit" value="Use Clean Money" onclick="buyComm(\''
+										+ preciousMetalsPrice
+										+ ','
+										+ userid
+										+ ','
+										+ "preciousMetals"
+										+ ','
+										+ clean_money
+										+ ','
+										+ "clean"
+										+ ','
+										+ "preciousMetalsQuantity"
+										+ ','
+										+ i
+										+ '\')"><input type="submit" value="Use Dirty Money" onclick="buyComm(\''
+										+ preciousMetalsPrice
+										+ ','
+										+ userid
+										+ ','
+										+ "preciousMetals"
+										+ ','
+										+ dirty_money
+										+ ','
+										+ "dirty"
+										+ ','
+										+ "preciousMetalsQuantity"
+										+ ',' + i + '\')">';
+										
+								}
+								
+								if (preciousMetals == 0){
+									c8.innerHTML = '<input type="submit" name="preciousMetalsQuantity" value="Sold out">';
+								}
+
+								c9.innerHTML = property;
+								c10.innerHTML = propertyPrice;
+								
+							if (property>0){
+								c11.innerHTML = '<input type="number" name="propertyQuantity" value="1" min="1" max="'+property+'"><input type="submit" value="Use Clean Money" onclick="buyComm(\''
+								+ propertyPrice
+								+ ','
+								+ userid
+								+ ','
+								+ "property"
+								+ ','
+								+ clean_money
+								+ ','
+								+ "clean"
+								+ ','
+								+ "propertyQuantity"
+								+ ','
+								+ i
+								+ '\')"><input type="submit" value="Use Dirty Money" onclick="buyComm(\''
+								+ propertyPrice
+								+ ','
+								+ userid
+								+ ','
+								+ "property"
+								+ ','
+								+ dirty_money
+								+ ','
+								+ "dirty"
+								+ ','
+								+ "propertyQuantity"
+								+ ',' + i + '\')">';
+								
+							}
+							
+							if (property == 0){
+								c11.innerHTML = '<input type="submit" name="propertyQuantity" value="Sold out">';
+							}
+								
+								c12.innerHTML = artWorks;
+								c13.innerHTML = artPrice;
+								
+							if (artWorks>0){
+								c14.innerHTML = '<input type="number" name="artWorksQuantity" value="1" min="1" max="'+artWorks+'"><input type="submit" value="Use Clean Money" onclick="buyComm(\''
+								+ artPrice
+								+ ','
+								+ userid
+								+ ','
+								+ "artWorks"
+								+ ','
+								+ clean_money
+								+ ','
+								+ "clean"
+								+ ','
+								+ "artWorksQuantity"
+								+ ','
+								+ i
+								+ '\')"><input type="submit" value="Use Dirty Money" onclick="buyComm(\''
+								+ artPrice
+								+ ','
+								+ userid
+								+ ','
+								+ "artWorks"
+								+ ','
+								+ dirty_money
+								+ ','
+								+ "dirty"
+								+ ','
+								+ "artWorksQuantity"
+								+ ',' + i + '\')">';
+							}
+							
+							if (artWorks == 0){
+								c14.innerHTML = '<input type="submit" name="artWorksQuantity" value="Sold out">';;
+							}
+							}// end for
+						},
+
+						error : function(xhr, ajaxOptions, thrownError) {
+							if (xhr.status == 200) {
+								console.log("error junk if");
+								console.log(xhr);
+								//alert(ajaxOptions);
+							} else {
+								console.log("error junk else");
+								console.log(xhr);
+							}
+						}
+					});
+
+		//}
+
+		//---------------------------------Session Code--------------------------------------------------------------
+
+		$.ajax({
+			url : "TestServlet2",
+			type : 'POST',
+			//contentType : 'application/json',
+			//data: mystr, -----> this is the type of data you send
+			dataType : 'text',
+			success : function(response) {
+				//On ajax success do this
+				var type = typeof (response);
+				console.log(type);
+				console.log("response:");
+				console.log(response);
+				document.getElementById("welcome").innerHTML = "Welcome, "
+						+ response;
+
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				//On error do this
+				if (xhr.status == 200) {
+					console.log("error");
+					console.log(xhr);
+					//alert(ajaxOptions);
+				} else {
+					//alert(xhr.status);
+					//alert(thrownError);
+				}
+			}
+		});
+		
+		//-------------------------------------------------------------------------
+
+		function sendRequest(userId) {
+			//console.log(userId);
+			
+			if (confirm("Are you sure you would like to collaborate with "+userId)) {
+				
+				//-----------------------------userlogdetails---------------------------
+				
+				var today = new Date();
+				var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+				var dateTime = date+' '+time;
+				console.log(dateTime);
+				
+				var eventName = "Send Friend Request";
+				var value = userId;
+				
+				var userLog = "{'clientTimeStamp':'"+dateTime+"','eventName':'"+eventName+"','value':'"+value+"'}";
+				
+				$.ajax({
+					url : "UserLogServlet",
+					type : 'POST',
+					contentType : 'application/json',
+					data : userLog,
+
+					success : function(data) {
+						console.log("Communication successful");
+						console.log(data);
+						var type = typeof (data);
+						console.log(type);
+					},
+
+					error : function(xhr, ajaxOptions, thrownError) {
+						if (xhr.status == 200) {
+							console.log("Failed");
+						} 
+					}
+				});
+
+
+//-----------------------------userlogdetails---------------------------
+				
+			
+			$.ajax({
+				url : "TestServlet2",
+				type : 'POST',
+				dataType : 'text',
+				success : function(response) {
+					//On ajax success do this
+					var type = typeof (response);
+					console.log(type);
+					console.log("response:");
+					console.log(response);
+					requestToAdd(userId, response);
+
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do thisc4.innerHTML = lastname;
+					if (xhr.status == 200) {
+						console.log("error");
+     						console.log(xhr);
+						//alert(ajaxOptions);
+					} else {
+						//alert(xhr.status);
+						//alert(thrownError);
+					}
+				}
+			});
+			
+			alert("You have now sent a request to " + userId + " collaborate with you");
+
+			} else {
+				// Do nothing!
+			}
+			
+		}// end sendRequest()
+		
+			//-------------------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------------------
+		
+		function requestToAdd(receiver, sender){
+			var status = "waiting";
+			console.log(sender+"sender");
+			console.log(sender.trim()+"sender trimmed");
+			console.log(receiver);
+			var srString = "{'sender':'"+sender.trim()+"','receiver':'"+receiver+"','status':'"+status+ "'}";
+			
+			$.ajax({
+				url : "AddSenderReceiver",
+				type : 'POST',
+				contentType : 'application/json',
+				data : srString,
+				dataType : 'text',
+				
+				success : function(data) {
+					console.log("Communication succesful");	
+					console.log(srString);
+					console.log(data);
+					if(data.trim() == "this")
+						{
+						alert("You have sent this person a friend request already!!");
+						}
+				},
+				error : function(xhr, ajaxOptions, thrownError) {
+					//On error do this
+					if (xhr.status == 200) {
+						console.log("Failed");
+						//alert(ajaxOptions);
+					} else {
+						//alert(xhr.status);
+						//alert(thrownError);
+					}
+				}
+			});
+		}
+		
+		//--------------------------------------------------------------------------------------------------
+		
+		
+	</script>
+</body>
+</html>
